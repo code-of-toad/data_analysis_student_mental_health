@@ -4,7 +4,7 @@ A comprehensive data analysis project examining the mental health and wellbeing 
 
 ## 📊 Visual Summary
 
-![Student Mental Health Infographic](intermediate_work/infographic.JPG)
+![Student Mental Health Infographic](final_Infographic.jpg)
 
 *Visual summary of key findings from the student mental health analysis*
 
