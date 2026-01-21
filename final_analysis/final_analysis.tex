@@ -1,0 +1,2039 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{adjustbox}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\Huge \textbf{Stress, Sleep, Emotion Regulation, and Support-Seeking: Insights from a Large University Mental-Health Survey}\par}
+    \vspace{2cm}
+
+    {\Large\textbf{Group Members:}}\par
+    {\large Andy Chen \\ Krzysztof Oleksiak \\ Rafael Serrano Aparicio \\ Jeffrey Yan Man Fong \\ Danny Han \par}
+
+    \vfill
+    {\large \today\par}
+\end{titlepage}
+
+\newpage
+
+\section{Abstract}\label{abstract}
+
+This project analyzes data from the University Student Mental Health
+survey, a large-scale study of Canadian undergraduate students collected
+in Fall 2020 to measure psychological wellbeing, stress, emotional
+regulation, sleep behaviours, and social support. Using validated
+scales---including the DERS-16 for emotional regulation, the Seeking
+Social Support scale, the DASS-21, and the Perceived Stress Scale---we
+examined four key relationships: differences in emotional-regulation
+difficulties across academic programs, differences in social-support
+seeking across programs, the association between restfulness and
+mental-health symptoms, and changes in perceived stress before versus
+after the COVID-19 outbreak. Our analyses revealed minimal or
+non-significant differences across programs for both
+emotional-regulation difficulties and social-support seeking, a
+meaningful link between feeling well-rested and lower DASS symptom
+scores, and a significant increase in perceived stress following the
+onset of COVID-19. These findings suggest that individual wellbeing
+factors and external stressors may exert stronger influences on student
+mental health than academic program alone.
+
+\section{Introduction}\label{introduction}
+
+The \emph{University Student Mental Health} dataset contains survey
+responses from 1,192 undergraduate students across Canada, collected
+between September 22 and October 30, 2020. Recruitment occurred online
+through Facebook university groups, Reddit, Instagram, Twitter, and
+research-participant portals such as REACH BC and the CPA R2P2 portal.
+Participants completed a Qualtrics survey designed to assess multiple
+aspects of student wellbeing during the COVID-19 pandemic, including
+emotional regulation, perceived stress, depression--anxiety--stress
+symptoms, sleep behaviour, social-support seeking, physical activity,
+and demographic context. The dataset includes 147 variables spanning
+validated psychological scales, behavioural measures, and demographic
+information, offering a rich snapshot of undergraduate wellbeing during
+a period of significant external stress.
+
+The purpose of this project is to investigate four key research
+questions regarding student mental health:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Is there a correlation between the Program of Study and the
+  responses to the Difficulties in Emotional Regulation Scale (DERS)
+  Questionnaire?}
+\item
+  \textbf{Do students in different academic programs differ in how much
+  social support they seek?}
+\item
+  \textbf{Is feeling well-rested associated with differences in
+  mental-health symptoms measured by the DASS-21?}
+\item
+  \textbf{Did students' perceived stress levels change significantly
+  from before to after the COVID-19 outbreak, based on pre/post PSS
+  scores?}
+\item
+  \textbf{Is there a relationship between students' emotional-regulation
+  difficulties (DERS) and their hobby patterns, including both the
+  importance they place on different hobbies and the amount of time they
+  spend on them?}
+\end{enumerate}
+
+A focused subset of variables was selected from the full dataset, and
+each variable was cleaned, recoded, and scored according to the
+documentation provided by the dataset creators. Program of Study was
+treated as a categorical factor, originally coded 1--8 and recoded into
+descriptive program labels. The \textbf{Rested} variable was treated as
+an ordered factor with levels ``Yes,'' ``Somewhat,'' and ``No.''
+Psychological scales were scored using their validated scoring
+procedures: DERS-16 items were summed, SSS items were averaged, DASS-21
+items were summed and doubled for subscale totals, and PSS items were
+summed with designated items reverse-scored. Missing data were handled
+using listwise deletion for the analyses. All scoring procedures
+followed the official scale documentation.
+
+\newpage
+
+\subsubsection{Mini Codebook}\label{mini-codebook}
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{p{2.6cm} p{3.8cm} p{3.0cm} p{4.0cm} p{3.3cm}}
+\toprule
+\textbf{Variable} & \textbf{Description} & \textbf{Coding / Scale} & \textbf{Recoding / Scoring} & \textbf{Missing Treatment} \\
+\midrule
+Program & Student’s academic program of study & 1–8 coded as program categories & Recoded into descriptive labels (e.g., Business, Education, Engineering, etc.) & Listwise deletion \\
+DERS\_1--DERS\_16 & Difficulties in Emotional Regulation Scale items & 5-point Likert (1–5) & Averaged into DERS\_mean score; higher = more dysregulation & Listwise deletion \\
+SSS\_1--SSS\_12 & Seeking Social Support scale & 5-point Likert (1–5) & Averaged into total SSS score & Listwise deletion \\
+Rested & Self-reported restfulness upon waking & 1 = Yes, 2 = Somewhat, 3 = No & Treated as ordered factor & Listwise deletion \\
+DASS\_1--DASS\_21 & Depression Anxiety Stress Scale & 4-point Likert (0–3) & Summed and doubled for subscales; overall DASS average computed & Listwise deletion \\
+Pre\_PSS\_1--Pre\_PSS\_10 & Perceived Stress Scale (before COVID-19) & 0–4 Likert & Items 4, 5, 7, 8 reverse-scored; summed into total & Listwise deletion \\
+Post\_PSS\_1--Post\_PSS\_10 & Perceived Stress Scale (after COVID-19) & 0–4 Likert & Items 4, 5, 7, 8 reverse-scored; summed into total & Listwise deletion \\
+Hobbies\_Imp\_1--Hobbies\_Imp\_8 & Importance of various hobbies & 5-point Likert (1–5) & Averaged into Imp\_overall; also used individually & Listwise deletion \\
+Hobbies\_Time\_1--Hobbies\_Time\_8 & Weekly time spent on hobbies & 7-point Likert (1–7) & Averaged into Time\_overall; also used individually & Listwise deletion \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\newpage
+
+\section{Research Question 1: Program of Study and Emotional Regulation
+(DERS)}\label{research-question-1-program-of-study-and-emotional-regulation-ders}
+
+This section examines whether emotional-regulation difficulties differ
+across academic programs. The DERS-16 scale measures how frequently
+students experience problems with emotional regulation, with higher
+scores reflecting more frequent difficulties. Each participant's average
+DERS score was computed by taking the mean across the 16 DERS items.
+
+\subsubsection{Distribution of DERS Scores Across
+Programs}\label{distribution-of-ders-scores-across-programs}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-2-1.pdf}
+The distribution of DERS scores appears broadly similar across programs,
+though Education shows a slightly higher median compared to others. The
+overlap suggests differences may be modest, requiring statistical
+testing.
+
+\subsubsection{ANOVA Test}\label{anova-test}
+
+\begin{verbatim}
+##              Df Sum Sq Mean Sq F value Pr(>F)   
+## Program       7   17.6  2.5153   3.039 0.0037 **
+## Residuals   740  612.4  0.8276                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+The one-way ANOVA indicates statistically significant differences among
+at least some program means (α = 0.05). This suggests that average
+emotional-regulation difficulty varies slightly across academic fields,
+though the effect appears small.
+
+\subsubsection{Confidence Intervals for Mean DERS
+Scores}\label{confidence-intervals-for-mean-ders-scores}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-4-1.pdf}
+Programs show substantial overlap in confidence intervals, reinforcing
+that while differences exist, they are relatively small in magnitude.
+
+\subsubsection{Summary Statistics}\label{summary-statistics}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   1.000   2.188   2.875   2.894   3.578   5.000
+\end{verbatim}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   1.000   2.000   3.000   2.901   4.000   5.000
+\end{verbatim}
+
+\subsubsection{Interpretation}\label{interpretation}
+
+The mean DERS score across students lies between 2 and 3, meaning the
+average respondent experiences emotional-regulation difficulties
+somewhere between ``sometimes'' and ``about half the time.'' The median
+DERS response (3) indicates that half of all students report moderate
+emotional-regulation difficulty (36\%--65\% of the time). Overall, the
+data suggest that emotional-regulation challenges are fairly common
+across programs.
+
+\newpage
+
+\section{Research Question 2: Program of Study and Seeking Social
+Support
+(SSS)}\label{research-question-2-program-of-study-and-seeking-social-support-sss}
+
+This analysis investigates whether the amount of social support students
+seek differs across academic programs. The Seeking Social Support (SSS)
+scale is a 12-item instrument scored on a 1--5 Likert scale, where
+higher values indicate greater levels of support-seeking behavior. For
+each participant, we calculated the mean SSS score across all items.
+
+\subsubsection{Distribution of DERS Scores Across
+Programs}\label{distribution-of-ders-scores-across-programs-1}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-7-1.pdf}
+The distribution of DERS scores appears broadly similar across programs,
+though Education shows a slightly higher median compared to others. The
+overlap suggests differences may be modest, requiring statistical
+testing.
+
+\subsubsection{ANOVA Test}\label{anova-test-1}
+
+\begin{verbatim}
+## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  SSS and Program
+## F = 1.5207, num df = 7.00, denom df = 102.57, p-value = 0.1685
+\end{verbatim}
+
+The p-value is large, indicating no significant differences in SSS
+between academic programs.
+
+\subsubsection{SSS Differences by Sex}\label{sss-differences-by-sex}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-9-1.pdf}
+Female and male students show slightly different distributions, but the
+overlap is substantial.
+
+\subsubsection{t-Test: Female vs Male}\label{t-test-female-vs-male}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  survey.data$SSS[survey.data$Sex == "Female"] and survey.data$SSS[survey.data$Sex == "Male"]
+## t = 1.968, df = 116.74, p-value = 0.05144
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.001005742  0.317077317
+## sample estimates:
+## mean of x mean of y 
+##  3.300509  3.142473
+\end{verbatim}
+
+The p-value is just above 0.05. This suggests no statistically reliable
+difference in SSS between men and women.
+
+\subsubsection{SSS Differences by International
+Status}\label{sss-differences-by-international-status}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-11-1.pdf}
+International and domestic students appear very similar in how much
+social support they report seeking.
+
+\subsubsection{Relationship Between SSS and Emotional-Regulation
+Difficulty
+(DERS)}\label{relationship-between-sss-and-emotional-regulation-difficulty-ders}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-12-1.pdf}
+There is a slight downward pattern: higher DERS (more
+emotional-regulation difficulty) is associated with lower SSS.
+
+\subsubsection{High vs Low DERS Groups}\label{high-vs-low-ders-groups}
+
+We divide students into two groups based on whether their DERS score
+exceeds 64.
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+Students with very high DERS scores clearly show lower SSS values.
+
+\subsubsection{t-Test: Low DERS vs High
+DERS}\label{t-test-low-ders-vs-high-ders}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  survey.data$SSS[survey.data$DERS <= 64] and survey.data$SSS[survey.data$DERS > 64]
+## t = 5.0255, df = 117.47, p-value = 1.816e-06
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  0.2425650 0.5580672
+## sample estimates:
+## mean of x mean of y 
+##  3.331167  2.930851
+\end{verbatim}
+
+The p-value is extremely small (1.8e-06). This indicates a highly
+significant difference: Students who struggle more with emotional
+regulation tend to seek less social support.
+
+\subsubsection{Interpretation}\label{interpretation-1}
+
+Across academic programs, sex, and international status, students report
+similar levels of social-support seeking. The only meaningful predictor
+in this analysis is emotional-regulation difficulty:
+
+Students with high DERS scores consistently report lower SSS.
+
+This suggests that the tendency to seek social support is influenced
+more by psychological factors than by demographic or academic ones.
+
+\newpage
+
+\section{Research Question 3: Restfulness and Mental-Health Symptoms
+(DASS-21)}\label{research-question-3-restfulness-and-mental-health-symptoms-dass-21}
+
+This analysis examines whether students who report feeling well-rested
+differ in their mental-health symptoms, as measured by the DASS-21
+(Depression, Anxiety, and Stress Scale). Each student answered 21 items
+scored from 0--3, and higher average scores indicate greater
+psychological distress. The Rested variable contains three groups:
+\textbf{Yes (1)}, \textbf{Somewhat (2)}, and \textbf{No (3)}.
+
+\begin{longtable}[]{@{}lrrr@{}}
+\caption{Average DASS Scores by Rested Group}\tabularnewline
+\toprule\noalign{}
+DASS\_Variable & 1 & 2 & 3 \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+DASS\_Variable & 1 & 2 & 3 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+n & 155.000000 & 387.000000 & 206.000000 \\
+DASS\_1 & 1.974193 & 2.333333 & 2.757282 \\
+DASS\_2 & 1.793548 & 1.956072 & 2.150485 \\
+DASS\_3 & 1.625806 & 1.878553 & 2.378641 \\
+DASS\_4 & 1.470968 & 1.728682 & 1.975728 \\
+DASS\_5 & 2.380645 & 2.764858 & 3.310680 \\
+DASS\_6 & 1.993548 & 2.121447 & 2.461165 \\
+DASS\_7 & 1.574194 & 1.829457 & 2.082524 \\
+DASS\_8 & 2.161290 & 2.307494 & 2.762136 \\
+DASS\_9 & 1.896774 & 2.180879 & 2.587379 \\
+DASS\_10 & 1.812903 & 2.147287 & 2.718447 \\
+DASS\_11 & 2.077419 & 2.320413 & 2.742718 \\
+DASS\_12 & 2.103226 & 2.529716 & 3.077670 \\
+DASS\_13 & 2.070968 & 2.372093 & 2.936893 \\
+DASS\_14 & 1.864516 & 1.989664 & 2.296117 \\
+DASS\_15 & 1.741936 & 1.956072 & 2.514563 \\
+DASS\_16 & 1.774193 & 2.033592 & 2.621359 \\
+DASS\_17 & 1.787097 & 1.935401 & 2.480583 \\
+DASS\_18 & 1.767742 & 1.852713 & 2.208738 \\
+DASS\_19 & 1.580645 & 1.863049 & 2.189320 \\
+DASS\_20 & 1.741936 & 1.860465 & 2.223301 \\
+DASS\_21 & 1.632258 & 1.780362 & 2.330097 \\
+Overall\_DASS\_Average & 1.848848 & 2.082933 & 2.514563 \\
+\end{longtable}
+
+Students who report being well-rested exhibit clearly lower average DASS
+scores, indicating fewer symptoms of depression, anxiety, and stress.
+Students who report not feeling rested show the highest levels of
+psychological distress, with the ``Somewhat'' group in the middle.
+
+\subsubsection{Distribution of DASS Scores by Rested
+Group}\label{distribution-of-dass-scores-by-rested-group}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-16-1.pdf}
+The boxplot shows a clear trend:
+
+\begin{itemize}
+\item
+  Well-rested students: lowest median DASS, smallest variability
+\item
+  Somewhat rested students: moderate DASS
+\item
+  Not rested students: highest median and widest spread
+\end{itemize}
+
+The upward shift of medians and increasing variability from left to
+right strongly suggests a relationship between restfulness and
+mental-health symptoms.
+
+\subsubsection{ANOVA Test}\label{anova-test-2}
+
+\begin{verbatim}
+##             Df Sum Sq Mean Sq F value   Pr(>F)    
+## Rested       2  4.790  2.3950   29.66 1.11e-09 ***
+## Residuals   60  4.846  0.0808                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{verbatim}
+## F = 29.655 | F_critical = 3.15 | df1 = 2 | df2 = 60
+\end{verbatim}
+
+\begin{verbatim}
+## Decision: Reject Ho  There are significant differences among the Rested groups.
+\end{verbatim}
+
+The ANOVA produces a highly significant F-statistic, well above the
+critical value. This indicates that mean DASS scores differ
+significantly among the three restfulness groups.
+
+\subsubsection{Interpretation}\label{interpretation-2}
+
+The statistical and visual evidence clearly indicate that restfulness is
+strongly associated with mental-health symptoms. Students who report
+being well-rested show substantially lower average DASS scores than
+those who report being ``Somewhat'' or ``Not'' rested. The ANOVA
+confirms that these differences are statistically meaningful.
+
+In short, better sleep is linked with reduced symptoms of depression,
+anxiety, and stress among university students. Although this does not
+establish causation, the pattern is consistent and robust across the
+analysis.
+
+\newpage
+
+\section{Research Question 4: Pre- vs Post-COVID Perceived Stress
+(PSS)}\label{research-question-4-pre--vs-post-covid-perceived-stress-pss}
+
+This analysis investigates whether students' perceived stress levels
+changed significantly from \textbf{before} to \textbf{after} the
+COVID-19 outbreak. The Perceived Stress Scale (PSS) contains 10 items
+scored from 0--4, and higher totals indicate greater stress. Since the
+same students completed both the pre- and post-COVID versions, a
+\textbf{paired t-test} is appropriate to detect changes in stress
+levels.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1746}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0952}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0952}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1270}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1270}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0794}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0794}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}@{}}
+\caption{Descriptive Statistics for Pre- and Post-COVID PSS Total
+Scores}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+vars
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+n
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+mean
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+sd
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+median
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+min
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+max
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+range
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+vars
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+n
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+mean
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+sd
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+median
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+min
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+max
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+range
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+pre\_total & 1 & 1193 & 22.506 & 6.792 & 23 & 0 & 42 & 42 \\
+post\_total & 2 & 1193 & 25.376 & 6.985 & 26 & 0 & 42 & 42 \\
+\end{longtable}
+
+Students' post-COVID stress scores show a higher mean and increased
+variability compared to pre-COVID scores, suggesting upward pressure on
+stress levels after the onset of the pandemic.
+
+\subsubsection{Boxplot Comparison}\label{boxplot-comparison}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-19-1.pdf}
+The boxplots show a clear upward shift in the distribution after
+COVID-19: higher median, higher upper quartile, and more extreme values.
+
+\subsubsection{Normality Check (QQ
+Plots)}\label{normality-check-qq-plots}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-20-1.pdf}
+Both plots show mild deviations but are acceptable given the large
+sample size (n = 1193), making the paired t-test robust.
+
+\subsubsection{Paired t-Test}\label{paired-t-test}
+
+\begin{verbatim}
+## 
+##  Paired t-test
+## 
+## data:  pss_data$pre_total and pss_data$post_total
+## t = -15.13, df = 1192, p-value < 2.2e-16
+## alternative hypothesis: true mean difference is not equal to 0
+## 95 percent confidence interval:
+##  -3.241302 -2.497173
+## sample estimates:
+## mean difference 
+##       -2.869237
+\end{verbatim}
+
+\subsubsection{Effect Size (Cohen's d)}\label{effect-size-cohens-d}
+
+\begin{verbatim}
+## Cohen's d |       95% CI
+## ------------------------
+## 0.44      | [0.38, 0.50]
+\end{verbatim}
+
+Cohen's d is approximately 0.44, a medium effect size, meaning the
+increase in stress is not only statistically significant but also
+meaningful.
+
+\subsubsection{Interpretation}\label{interpretation-3}
+
+Students reported significantly higher perceived stress after the
+COVID-19 outbreak. The paired t-test shows a large test statistic with p
+\textless{} 0.001, and the effect size indicates a moderate increase in
+stress, consistent across participants.
+
+The boxplot and descriptive statistics reinforce this result: post-COVID
+stress scores are shifted upward with greater variability.
+
+Taken together, the evidence strongly supports that students experienced
+increased psychological stress following the onset of COVID-19, both
+statistically and practically significant.
+
+\newpage
+
+\section{Research Question 5: Hobbies and Emotional Regulation
+(DERS)}\label{research-question-5-hobbies-and-emotional-regulation-ders}
+
+This analysis investigates whether students' hobbies---both the amount
+of time spent on them and the importance assigned to them---are
+associated with difficulties in emotional regulation, as measured by the
+DERS-16 scale. We screened all eight hobby-importance items, eight
+hobby-time items, and two overall summary scores to identify which
+variables showed meaningful relationships with emotional-regulation
+difficulties. The goal was to determine whether certain leisure patterns
+are linked to students' self-reported ability to manage emotions.
+
+\subsubsection{Screening All Hobby
+Variables}\label{screening-all-hobby-variables}
+
+We began by examining the distribution and variability of all
+hobby-related variables.
+
+\begin{longtable}[]{@{}lrrr@{}}
+\caption{Means and Standard Deviations for All Hobby
+Variables}\tabularnewline
+\toprule\noalign{}
+Variable & Mean & SD & n \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Variable & Mean & SD & n \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Hobbies\_Imp\_1 & 2.267 & 1.307 & 748 \\
+Hobbies\_Imp\_2 & 2.116 & 1.091 & 748 \\
+Hobbies\_Imp\_3 & 2.586 & 1.111 & 748 \\
+Hobbies\_Imp\_4 & 3.229 & 1.017 & 748 \\
+Hobbies\_Imp\_5 & 2.961 & 1.115 & 748 \\
+Hobbies\_Imp\_6 & 4.167 & 0.798 & 748 \\
+Hobbies\_Imp\_7 & 2.418 & 0.989 & 748 \\
+Hobbies\_Imp\_8 & 3.270 & 1.063 & 748 \\
+Hobbies\_Time\_1 & 1.717 & 1.131 & 748 \\
+Hobbies\_Time\_2 & 1.509 & 0.925 & 748 \\
+Hobbies\_Time\_3 & 2.028 & 1.293 & 748 \\
+Hobbies\_Time\_4 & 4.162 & 1.388 & 748 \\
+Hobbies\_Time\_5 & 1.999 & 1.336 & 748 \\
+Hobbies\_Time\_6 & 5.352 & 1.501 & 748 \\
+Hobbies\_Time\_7 & 1.488 & 0.840 & 748 \\
+Hobbies\_Time\_8 & 2.485 & 1.370 & 748 \\
+Imp\_overall & 2.877 & 0.468 & 748 \\
+Time\_overall & 2.592 & 0.495 & 748 \\
+\end{longtable}
+
+Next, correlations were computed between each hobby variable and
+DERS\_mean. This screening step identifies which items have the
+strongest associations.
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{Correlations Between DERS\_mean and All Hobby Variables
+(Screening Table)}\tabularnewline
+\toprule\noalign{}
+Variable & r & p\_value & n & abs\_r \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Variable & r & p\_value & n & abs\_r \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Hobbies\_Time\_1 & -0.120 & 0.001 & 748 & 0.120 \\
+Hobbies\_Imp\_4 & 0.108 & 0.003 & 748 & 0.108 \\
+Hobbies\_Imp\_1 & -0.067 & 0.065 & 748 & 0.067 \\
+Hobbies\_Imp\_8 & 0.067 & 0.066 & 748 & 0.067 \\
+Hobbies\_Time\_4 & 0.063 & 0.084 & 748 & 0.063 \\
+Imp\_overall & 0.050 & 0.174 & 748 & 0.050 \\
+Hobbies\_Imp\_3 & 0.046 & 0.206 & 748 & 0.046 \\
+Time\_overall & -0.034 & 0.357 & 748 & 0.034 \\
+Hobbies\_Time\_2 & -0.027 & 0.466 & 748 & 0.027 \\
+Hobbies\_Time\_5 & -0.025 & 0.488 & 748 & 0.025 \\
+Hobbies\_Time\_6 & -0.021 & 0.564 & 748 & 0.021 \\
+Hobbies\_Imp\_2 & 0.019 & 0.608 & 748 & 0.019 \\
+Hobbies\_Imp\_6 & 0.017 & 0.643 & 748 & 0.017 \\
+Hobbies\_Imp\_5 & 0.011 & 0.767 & 748 & 0.011 \\
+Hobbies\_Time\_7 & 0.011 & 0.770 & 748 & 0.011 \\
+Hobbies\_Time\_8 & -0.005 & 0.884 & 748 & 0.005 \\
+Hobbies\_Imp\_7 & -0.005 & 0.896 & 748 & 0.005 \\
+Hobbies\_Time\_3 & 0.003 & 0.944 & 748 & 0.003 \\
+\end{longtable}
+
+Variables considered ``noteworthy'' met both criteria:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbar r\textbar{} ≥ 0.10
+\item
+  p \textless{} 0.05
+\end{itemize}
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{Hobby Variables With Significant Correlation With
+DERS\_mean}\tabularnewline
+\toprule\noalign{}
+Variable & r & p\_value & n & abs\_r \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Variable & r & p\_value & n & abs\_r \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Hobbies\_Time\_1 & -0.120 & 0.001 & 748 & 0.120 \\
+Hobbies\_Imp\_4 & 0.108 & 0.003 & 748 & 0.108 \\
+\end{longtable}
+
+Two items clearly stood out:
+
+\begin{itemize}
+\tightlist
+\item
+  Hobbies\_Time\_1: Hours spent on athletics / varsity / intramurals
+\item
+  Hobbies\_Imp\_4: Importance of watching online recreational content
+  (Netflix, YouTube)
+\end{itemize}
+
+\subsubsection{Correlation Tests}\label{correlation-tests}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  DERS_mean and Hobbies_Time_1
+## t = -3.3048, df = 746, p-value = 0.0009959
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.1901676 -0.0488571
+## sample estimates:
+##        cor 
+## -0.1201208
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  DERS_mean and Hobbies_Imp_4
+## t = 2.969, df = 746, p-value = 0.003083
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.03666589 0.17836881
+## sample estimates:
+##       cor 
+## 0.1080662
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Hobbies\_Time\_1: small negative correlation
+\item
+  Hobbies\_Imp\_4: small positive correlation
+\end{itemize}
+
+\subsubsection{Linear Models}\label{linear-models}
+
+Both linear models below confirm that, although the effect size was
+small, they are statistically detectable due to the large sample size.
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = DERS_mean ~ Hobbies_Time_1, data = Data_analysis)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.9011 -0.7136 -0.0261  0.6964  2.1840 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)     3.06112    0.06065  50.471  < 2e-16 ***
+## Hobbies_Time_1 -0.09752    0.02951  -3.305 0.000996 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9123 on 746 degrees of freedom
+## Multiple R-squared:  0.01443,    Adjusted R-squared:  0.01311 
+## F-statistic: 10.92 on 1 and 746 DF,  p-value: 0.0009959
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: DERS_mean
+##                 Df Sum Sq Mean Sq F value    Pr(>F)    
+## Hobbies_Time_1   1   9.09  9.0907  10.922 0.0009959 ***
+## Residuals      746 620.94  0.8324                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = DERS_mean ~ Hobbies_Imp_4, data = Data_analysis)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.00416 -0.71903 -0.03153  0.69110  2.22623 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    2.57850    0.11130  23.167  < 2e-16 ***
+## Hobbies_Imp_4  0.09763    0.03288   2.969  0.00308 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9136 on 746 degrees of freedom
+## Multiple R-squared:  0.01168,    Adjusted R-squared:  0.01035 
+## F-statistic: 8.815 on 1 and 746 DF,  p-value: 0.003083
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: DERS_mean
+##                Df Sum Sq Mean Sq F value   Pr(>F)   
+## Hobbies_Imp_4   1   7.36  7.3576   8.815 0.003083 **
+## Residuals     746 622.67  0.8347                    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\subsubsection{Visualizations}\label{visualizations}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-29-1.pdf}
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-29-2.pdf}
+
+\subsubsection{Interpretation}\label{interpretation-4}
+
+The screening process showed that most hobby variables had very weak or
+negligible relationships with emotional-regulation difficulties.
+However, two stood out with small yet statistically significant
+associations:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Hours spent in athletic activities (Hobbies\_Time\_1)
+\end{enumerate}
+
+Exhibits a negative relationship with DERS\_mean.
+
+Students who spend more time in athletic or varsity activities tend to
+report fewer difficulties regulating emotions.
+
+This aligns with research showing that physical activity supports mood
+regulation and stress recovery.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Importance of recreational online content (Hobbies\_Imp\_4)
+\end{enumerate}
+
+Shows a positive association with DERS\_mean.
+
+Students who rate online streaming (YouTube/Netflix) as more important
+tend to score slightly higher on emotional-regulation difficulties.
+
+While correlational, this could indicate coping through passive digital
+consumption rather than active stress-management strategies.
+
+Overall, hobby-related variables show subtle but meaningful links with
+emotional regulation, suggesting that leisure choices---especially
+physical activity and media-consumption habits---may play a modest role
+in students' emotional well-being.
+
+\newpage
+
+\section{Conclusion and Future
+Direction}\label{conclusion-and-future-direction}
+
+Across all four research questions, the results point to a consistent
+pattern: external factors such as program, sex, or international status
+did not strongly relate to mental-health outcomes, while internal
+factors---restfulness and emotional-regulation ability---showed clearer
+associations.
+
+Students in different programs showed only small differences in
+emotion-regulation (DERS) scores. Seeking social support (SSS) also did
+not vary meaningfully by program, sex, or international status. However,
+students with higher emotional-regulation difficulties tended to seek
+less social support, suggesting that personal emotional functioning
+plays a bigger role than demographic characteristics. Feeling
+well-rested showed a clear relationship with mental health: students who
+slept well reported noticeably lower depression, anxiety, and stress
+(DASS-21). Lastly, perceived stress (PSS) increased significantly after
+COVID-19, with a medium effect size, indicating a real and meaningful
+shift in student stress levels.
+
+These findings should be viewed with some caution. The data are
+self-reported, which can introduce bias, and the sample is not randomly
+selected, since students participated voluntarily online. The dataset is
+also cross-sectional, meaning we cannot establish cause and effect.
+Scale scoring was followed according to provided guidelines, but
+subjective interpretation of questions may still vary across
+respondents.
+
+Future studies could use a longitudinal design to track students over
+time or include additional variables such as sleep duration, academic
+workload, or social connectedness. More representative sampling across
+institutions would also strengthen generalizability. Finally, combining
+quantitative responses with qualitative insights could help explain why
+students differ in stress, restfulness, or support-seeking behaviors.
+
+Overall, the analysis suggests that personal well-being
+factors---especially sleep and emotional regulation---play a larger role
+in student mental health than demographic differences, and these areas
+may be the most valuable targets for future support initiatives.
+
+\newpage
+
+\section{Appendix}\label{appendix}
+
+\subsection{Research Question 1}\label{research-question-1}
+
+\subsubsection{Install and Load
+Libraries}\label{install-and-load-libraries}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{options}\NormalTok{(}\AttributeTok{repos =} \FunctionTok{c}\NormalTok{(}\AttributeTok{CRAN =} \StringTok{"https://cloud.r{-}project.org"}\NormalTok{))}
+\FunctionTok{install.packages}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"survey"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## package 'survey' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+##  C:\Users\toadcode\AppData\Local\Temp\RtmpW20DUw\downloaded_packages
+\end{verbatim}
+
+\subsubsection{Import Data}\label{import-data}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Data }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"student\_mental\_health.csv"}\NormalTok{)[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{1193}\NormalTok{, ]}
+\FunctionTok{attach}\NormalTok{(Data)}
+\end{Highlighting}
+\end{Shaded}
+
+\pagebreak
+
+\subsubsection{Filter Data}\label{filter-data}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Remove observations where participants failed the catch question}
+\NormalTok{passed\_catch }\OtherTok{=} \FunctionTok{filter}\NormalTok{(Data, Data}\SpecialCharTok{$}\NormalTok{Catch\_question }\SpecialCharTok{!=} \StringTok{"NA"}\NormalTok{)}
+
+\CommentTok{\# Isolate the appropriate columns}
+\NormalTok{this\_subset }\OtherTok{\textless{}{-}}\NormalTok{ passed\_catch[, }\FunctionTok{c}\NormalTok{(}\StringTok{"Program"}\NormalTok{, }\StringTok{"DERS\_1"}\NormalTok{, }\StringTok{"DERS\_2"}\NormalTok{, }\StringTok{"DERS\_3"}\NormalTok{, }\StringTok{"DERS\_4"}\NormalTok{, }
+                                   \StringTok{"DERS\_5"}\NormalTok{, }\StringTok{"DERS\_6"}\NormalTok{, }\StringTok{"DERS\_7"}\NormalTok{, }\StringTok{"DERS\_8"}\NormalTok{, }
+                                   \StringTok{"DERS\_9"}\NormalTok{, }\StringTok{"DERS\_10"}\NormalTok{, }\StringTok{"DERS\_11"}\NormalTok{, }\StringTok{"DERS\_12"}\NormalTok{, }
+                                   \StringTok{"DERS\_13"}\NormalTok{, }\StringTok{"DERS\_14"}\NormalTok{, }\StringTok{"DERS\_15"}\NormalTok{,}\StringTok{"DERS\_16"}\NormalTok{)]}
+                                   
+\CommentTok{\# Add new column to data}
+\NormalTok{this\_subset[}\StringTok{\textquotesingle{}DERS\_mean\textquotesingle{}}\NormalTok{] }\OtherTok{\textless{}{-}} \DecValTok{0}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(this\_subset}\SpecialCharTok{$}\NormalTok{Program))\{}
+  \CommentTok{\# Populate the new columns with the mean of DERS responses from each row}
+\NormalTok{  this\_subset}\SpecialCharTok{$}\NormalTok{DERS\_mean[i] }\OtherTok{=} \FunctionTok{rowMeans}\NormalTok{(this\_subset[i, }\FunctionTok{c}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{17}\NormalTok{)])}
+  
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Boxplots of the Mean Response to DERS Questions Per
+Program}\label{boxplots-of-the-mean-response-to-ders-questions-per-program}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{this\_subset}\SpecialCharTok{$}\NormalTok{Program }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(this\_subset}\SpecialCharTok{$}\NormalTok{Program)}
+
+\FunctionTok{ggplot}\NormalTok{(this\_subset, }
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{this\_subset}\SpecialCharTok{$}\NormalTok{Program, }
+           \AttributeTok{y=}\NormalTok{this\_subset}\SpecialCharTok{$}\NormalTok{DERS\_mean, }
+           \AttributeTok{fill=}\NormalTok{this\_subset}\SpecialCharTok{$}\NormalTok{Program)) }\SpecialCharTok{+}
+
+\CommentTok{\# Label the scale}
+\FunctionTok{scale\_fill\_discrete}\NormalTok{(}\StringTok{\textquotesingle{}Programs\textquotesingle{}}\NormalTok{, }
+                    \AttributeTok{labels=}\FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Business\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Education\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Engineering\textquotesingle{}}\NormalTok{, }
+                    \StringTok{\textquotesingle{}Fine Arts\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Human \& Social Development\textquotesingle{}}\NormalTok{, }
+                    \StringTok{\textquotesingle{}Humanities\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Sciences\textquotesingle{}}\NormalTok{, }
+                    \StringTok{\textquotesingle{}Social Sciences\textquotesingle{}}\NormalTok{)) }\SpecialCharTok{+}
+
+\FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+
+\FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Distribution of Average Response Per Program"}\NormalTok{,}
+           \AttributeTok{x =} \StringTok{"Programs of Study"}\NormalTok{,}
+           \AttributeTok{y =} \StringTok{"Response"}\NormalTok{) }\SpecialCharTok{+}
+
+\FunctionTok{theme\_minimal}\NormalTok{()}\SpecialCharTok{+} 
+
+\FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{), }\CommentTok{\# center the title}
+      \AttributeTok{axis.text.x =} \FunctionTok{element\_blank}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-34-1.pdf}
+
+\subsubsection{AoV and F Test}\label{aov-and-f-test}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(this\_subset}\SpecialCharTok{$}\NormalTok{DERS\_mean }\SpecialCharTok{\textasciitilde{}}\NormalTok{ this\_subset}\SpecialCharTok{$}\NormalTok{Program, }\AttributeTok{data =}\NormalTok{ this\_subset)}
+
+\NormalTok{aov\_summary }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(results)}
+
+\NormalTok{aov\_table }\OtherTok{\textless{}{-}}\NormalTok{ aov\_summary[[}\DecValTok{1}\NormalTok{]]}
+
+\CommentTok{\# F Test}
+\NormalTok{f\_value }\OtherTok{\textless{}{-}}\NormalTok{ aov\_table[[}\StringTok{"F value"}\NormalTok{]][}\DecValTok{1}\NormalTok{]}
+
+\NormalTok{df\_1 }\OtherTok{\textless{}{-}}\NormalTok{ aov\_table[[}\StringTok{"Df"}\NormalTok{]][}\DecValTok{1}\NormalTok{] }\CommentTok{\# degrees of freedom}
+\NormalTok{df\_2 }\OtherTok{\textless{}{-}}\NormalTok{ aov\_table[[}\StringTok{"Df"}\NormalTok{]][}\DecValTok{2}\NormalTok{] }\CommentTok{\# degrees of freedom}
+
+\NormalTok{f\_crit }\OtherTok{\textless{}{-}} \FunctionTok{qf}\NormalTok{(}\FloatTok{0.95}\NormalTok{, df\_1, df\_2)}
+
+\ControlFlowTok{if}\NormalTok{ (f\_value }\SpecialCharTok{\textgreater{}}\NormalTok{ f\_crit) \{}
+  \FunctionTok{print}\NormalTok{(}\StringTok{"Reject the null hypothesis."}\NormalTok{)}
+  
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+  \FunctionTok{print}\NormalTok{(}\StringTok{"Fail to reject the null hypothesis."}\NormalTok{)}
+  
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Reject the null hypothesis."
+\end{verbatim}
+
+\subsubsection{Condifence Intervals}\label{condifence-intervals}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Program }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{:}\DecValTok{8}
+\NormalTok{Mean }\OtherTok{\textless{}{-}} \DecValTok{0}
+\NormalTok{Lower\_Bound }\OtherTok{\textless{}{-}} \DecValTok{0}
+\NormalTok{Upper\_Bound }\OtherTok{\textless{}{-}} \DecValTok{0}
+
+\NormalTok{ci\_summary }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(Program, Mean, Lower\_Bound, Upper\_Bound)}
+
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{8}\NormalTok{)\{}
+\NormalTok{  this\_data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(this\_subset}\SpecialCharTok{$}\NormalTok{DERS\_mean, this\_subset}\SpecialCharTok{$}\NormalTok{Program }\SpecialCharTok{==}\NormalTok{ i)}
+  
+\NormalTok{  t\_result }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(this\_data)}
+  
+\NormalTok{  this\_ci }\OtherTok{\textless{}{-}}\NormalTok{ t\_result}\SpecialCharTok{$}\NormalTok{conf.int}
+  
+\NormalTok{  ci\_summary}\SpecialCharTok{$}\NormalTok{Mean[i] }\OtherTok{=}\NormalTok{ t\_result}\SpecialCharTok{$}\NormalTok{estimate}
+\NormalTok{  ci\_summary}\SpecialCharTok{$}\NormalTok{Lower\_Bound[i] }\OtherTok{=}\NormalTok{ this\_ci[}\DecValTok{1}\NormalTok{]}
+\NormalTok{  ci\_summary}\SpecialCharTok{$}\NormalTok{Upper\_Bound[i] }\OtherTok{=}\NormalTok{ this\_ci[}\DecValTok{2}\NormalTok{]}
+\NormalTok{\}}
+
+
+\NormalTok{means }\OtherTok{\textless{}{-}}\NormalTok{ ci\_summary}\SpecialCharTok{$}\NormalTok{Mean}
+\NormalTok{lower }\OtherTok{\textless{}{-}}\NormalTok{ ci\_summary}\SpecialCharTok{$}\NormalTok{Lower\_Bound}
+\NormalTok{upper }\OtherTok{\textless{}{-}}\NormalTok{ ci\_summary}\SpecialCharTok{$}\NormalTok{Upper\_Bound}
+
+\NormalTok{labels }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Business\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Education\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Engineering\textquotesingle{}}\NormalTok{, }
+                    \StringTok{\textquotesingle{}Fine Arts\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Human \& Social Development\textquotesingle{}}\NormalTok{, }
+                    \StringTok{\textquotesingle{}Humanities\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Sciences\textquotesingle{}}\NormalTok{, }
+                    \StringTok{\textquotesingle{}Social Sciences\textquotesingle{}}\NormalTok{)}
+
+\FunctionTok{ggplot}\NormalTok{(ci\_summary, }\FunctionTok{aes}\NormalTok{(labels, means)) }\SpecialCharTok{+}
+\CommentTok{\# Label the scale}
+\FunctionTok{scale\_fill\_discrete}\NormalTok{(}\StringTok{\textquotesingle{}Programs\textquotesingle{}}\NormalTok{, }
+                    \AttributeTok{labels=}\FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Business\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Education\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Engineering\textquotesingle{}}\NormalTok{, }
+                    \StringTok{\textquotesingle{}Fine Arts\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Human \& Social Development\textquotesingle{}}\NormalTok{, }
+                    \StringTok{\textquotesingle{}Humanities\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Sciences\textquotesingle{}}\NormalTok{, }
+                    \StringTok{\textquotesingle{}Social Sciences\textquotesingle{}}\NormalTok{)) }\SpecialCharTok{+}
+
+\FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+\FunctionTok{geom\_errorbar}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{ymin =}\NormalTok{ lower, }\AttributeTok{ymax =}\NormalTok{ upper)) }\SpecialCharTok{+} 
+\FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Confidence Interval of Mean of DERS Responses"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Programs"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Average Response to DERS"}\NormalTok{) }\SpecialCharTok{+}
+
+\FunctionTok{theme\_minimal}\NormalTok{()}\SpecialCharTok{+} 
+\FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{)) }\SpecialCharTok{+} \CommentTok{\# center the title}
+\FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+\FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{), }\AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\AttributeTok{by =} \FloatTok{0.25}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-36-1.pdf}
+
+\subsection{Research Question 2}\label{research-question-2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(SSS}\SpecialCharTok{\textasciitilde{}}\NormalTok{Program,}\AttributeTok{data=}\NormalTok{survey.data,}\AttributeTok{cex.axis=}\FloatTok{0.75}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-38-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{oneway.test}\NormalTok{(SSS}\SpecialCharTok{\textasciitilde{}}\NormalTok{Program,}\AttributeTok{data=}\NormalTok{survey.data, }\AttributeTok{var.equal =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  SSS and Program
+## F = 1.5207, num df = 7.00, denom df = 102.57, p-value = 0.1685
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(SSS}\SpecialCharTok{\textasciitilde{}}\NormalTok{Sex,}\AttributeTok{data=}\NormalTok{survey.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-40-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{t.test}\NormalTok{(survey.data[survey.data}\SpecialCharTok{$}\NormalTok{Sex}\SpecialCharTok{==}\StringTok{"Female"}\NormalTok{,}\StringTok{"SSS"}\NormalTok{],survey.data[survey.data}\SpecialCharTok{$}\NormalTok{Sex}\SpecialCharTok{==}\StringTok{"Male"}\NormalTok{,}\StringTok{"SSS"}\NormalTok{], }\StringTok{"two.sided"}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  survey.data[survey.data$Sex == "Female", "SSS"] and survey.data[survey.data$Sex == "Male", "SSS"]
+## t = 1.968, df = 116.74, p-value = 0.05144
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.001005742  0.317077317
+## sample estimates:
+## mean of x mean of y 
+##  3.300509  3.142473
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(SSS}\SpecialCharTok{\textasciitilde{}}\NormalTok{International,}\AttributeTok{data=}\NormalTok{survey.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-42-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(SSS}\SpecialCharTok{\textasciitilde{}}\NormalTok{DERS, }\AttributeTok{data=}\NormalTok{survey.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-43-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(SSS}\SpecialCharTok{\textasciitilde{}}\NormalTok{DERS}\SpecialCharTok{\textgreater{}}\DecValTok{64}\NormalTok{, }\AttributeTok{data=}\NormalTok{survey.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-44-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{t.test}\NormalTok{(survey.data[survey.data}\SpecialCharTok{$}\NormalTok{DERS}\SpecialCharTok{\textless{}=}\DecValTok{64}\NormalTok{,}\StringTok{"SSS"}\NormalTok{],survey.data[survey.data}\SpecialCharTok{$}\NormalTok{DERS}\SpecialCharTok{\textgreater{}}\DecValTok{64}\NormalTok{,}\StringTok{"SSS"}\NormalTok{], }\StringTok{"two.sided"}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  survey.data[survey.data$DERS <= 64, "SSS"] and survey.data[survey.data$DERS > 64, "SSS"]
+## t = 5.0255, df = 117.47, p-value = 1.816e-06
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  0.2425650 0.5580672
+## sample estimates:
+## mean of x mean of y 
+##  3.331167  2.930851
+\end{verbatim}
+
+\subsection{Research Question 3}\label{research-question-3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{load}\NormalTok{(}\StringTok{"Clean\_Data.RData"}\NormalTok{)}
+\NormalTok{dat }\OtherTok{\textless{}{-}}\NormalTok{ y }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Rested =} \FunctionTok{as.numeric}\NormalTok{(Rested))}
+\NormalTok{avg\_dass }\OtherTok{\textless{}{-}}\NormalTok{ dat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(Rested) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{n =} \FunctionTok{n}\NormalTok{(),}
+    \FunctionTok{across}\NormalTok{(}\FunctionTok{starts\_with}\NormalTok{(}\StringTok{"DASS"}\NormalTok{), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{mean}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)),}
+    \AttributeTok{.groups =} \StringTok{"drop"}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rowwise}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Overall\_DASS\_Average =} \FunctionTok{mean}\NormalTok{(}\FunctionTok{c\_across}\NormalTok{(}\FunctionTok{starts\_with}\NormalTok{(}\StringTok{"DASS"}\NormalTok{)), }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ungroup}\NormalTok{()}
+
+\NormalTok{n\_row }\OtherTok{\textless{}{-}}\NormalTok{ avg\_dass }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(Rested, n) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ Rested, }\AttributeTok{values\_from =}\NormalTok{ n, }\AttributeTok{names\_sort =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{DASS\_Variable =} \StringTok{"n"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(DASS\_Variable, }\FunctionTok{everything}\NormalTok{())}
+
+\NormalTok{avg\_dass\_long }\OtherTok{\textless{}{-}}\NormalTok{ avg\_dass }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{n) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \SpecialCharTok{{-}}\NormalTok{Rested, }\AttributeTok{names\_to =} \StringTok{"DASS\_Variable"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"Mean"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ Rested, }\AttributeTok{values\_from =}\NormalTok{ Mean, }\AttributeTok{names\_sort =} \ConstantTok{TRUE}\NormalTok{)}
+
+\NormalTok{final\_table }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(n\_row, avg\_dass\_long)}
+
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(final\_table, }\AttributeTok{caption =} \StringTok{"Average DASS Scores by Rested Group"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\caption{Average DASS Scores by Rested Group}\tabularnewline
+\toprule\noalign{}
+DASS\_Variable & 1 & 2 & 3 \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+DASS\_Variable & 1 & 2 & 3 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+n & 155.000000 & 387.000000 & 206.000000 \\
+DASS\_1 & 1.974193 & 2.333333 & 2.757282 \\
+DASS\_2 & 1.793548 & 1.956072 & 2.150485 \\
+DASS\_3 & 1.625806 & 1.878553 & 2.378641 \\
+DASS\_4 & 1.470968 & 1.728682 & 1.975728 \\
+DASS\_5 & 2.380645 & 2.764858 & 3.310680 \\
+DASS\_6 & 1.993548 & 2.121447 & 2.461165 \\
+DASS\_7 & 1.574194 & 1.829457 & 2.082524 \\
+DASS\_8 & 2.161290 & 2.307494 & 2.762136 \\
+DASS\_9 & 1.896774 & 2.180879 & 2.587379 \\
+DASS\_10 & 1.812903 & 2.147287 & 2.718447 \\
+DASS\_11 & 2.077419 & 2.320413 & 2.742718 \\
+DASS\_12 & 2.103226 & 2.529716 & 3.077670 \\
+DASS\_13 & 2.070968 & 2.372093 & 2.936893 \\
+DASS\_14 & 1.864516 & 1.989664 & 2.296117 \\
+DASS\_15 & 1.741936 & 1.956072 & 2.514563 \\
+DASS\_16 & 1.774193 & 2.033592 & 2.621359 \\
+DASS\_17 & 1.787097 & 1.935401 & 2.480583 \\
+DASS\_18 & 1.767742 & 1.852713 & 2.208738 \\
+DASS\_19 & 1.580645 & 1.863049 & 2.189320 \\
+DASS\_20 & 1.741936 & 1.860465 & 2.223301 \\
+DASS\_21 & 1.632258 & 1.780362 & 2.330097 \\
+Overall\_DASS\_Average & 1.848848 & 2.082933 & 2.514563 \\
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat }\OtherTok{\textless{}{-}} \FunctionTok{read\_xlsx}\NormalTok{(}\StringTok{"average\_DASS\_transposed\_with\_n.xlsx"}\NormalTok{)}
+
+
+\NormalTok{dat\_clean }\OtherTok{\textless{}{-}}\NormalTok{ dat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(DASS\_Variable }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"n"}\NormalTok{, }\StringTok{"Overall\_DASS\_Average"}\NormalTok{)))}
+
+\CommentTok{\# Convert from wide → long format}
+\NormalTok{dat\_long }\OtherTok{\textless{}{-}}\NormalTok{ dat\_clean }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}
+    \AttributeTok{cols =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{1}\StringTok{\textasciigrave{}}\NormalTok{, }\StringTok{\textasciigrave{}}\AttributeTok{2}\StringTok{\textasciigrave{}}\NormalTok{, }\StringTok{\textasciigrave{}}\AttributeTok{3}\StringTok{\textasciigrave{}}\NormalTok{),}
+    \AttributeTok{names\_to =} \StringTok{"Rested"}\NormalTok{,}
+    \AttributeTok{values\_to =} \StringTok{"Mean\_DASS"}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{Rested =} \FunctionTok{recode}\NormalTok{(Rested,}
+                    \StringTok{"1"} \OtherTok{=} \StringTok{"Yes"}\NormalTok{,}
+                    \StringTok{"2"} \OtherTok{=} \StringTok{"Somewhat"}\NormalTok{,}
+                    \StringTok{"3"} \OtherTok{=} \StringTok{"No"}\NormalTok{),}
+    \AttributeTok{Rested =} \FunctionTok{factor}\NormalTok{(Rested, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"Somewhat"}\NormalTok{, }\StringTok{"No"}\NormalTok{))}
+\NormalTok{  )}
+
+\FunctionTok{ggplot}\NormalTok{(dat\_long, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Rested, }\AttributeTok{y =}\NormalTok{ Mean\_DASS, }\AttributeTok{fill =}\NormalTok{ Rested)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{width =} \FloatTok{0.6}\NormalTok{, }\AttributeTok{outlier.alpha =} \FloatTok{0.3}\NormalTok{) }\SpecialCharTok{+}
+  \CommentTok{\# (Optional) add jitter points for each DASS item}
+  \CommentTok{\# geom\_jitter(width = 0.15, alpha = 0.6, size = 1.8) +}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#99ff99"}\NormalTok{, }\StringTok{"\#99ccff"}\NormalTok{, }\StringTok{"\#ff9999"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Average DASS Results by Rested"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Rested Response"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Average DASS Value"}\NormalTok{,}
+    \AttributeTok{fill =} \StringTok{"Rested"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{),}
+    \AttributeTok{legend.position =} \StringTok{"none"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-48-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat }\OtherTok{\textless{}{-}} \FunctionTok{read\_xlsx}\NormalTok{(}\StringTok{"average\_DASS\_transposed\_with\_n.xlsx"}\NormalTok{)}
+
+
+\NormalTok{dat\_clean }\OtherTok{\textless{}{-}}\NormalTok{ dat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\NormalTok{(DASS\_Variable }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"n"}\NormalTok{, }\StringTok{"Overall\_DASS\_Average"}\NormalTok{)))}
+
+\NormalTok{dat\_long }\OtherTok{\textless{}{-}}\NormalTok{ dat\_clean }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}
+    \AttributeTok{cols =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{1}\StringTok{\textasciigrave{}}\NormalTok{, }\StringTok{\textasciigrave{}}\AttributeTok{2}\StringTok{\textasciigrave{}}\NormalTok{, }\StringTok{\textasciigrave{}}\AttributeTok{3}\StringTok{\textasciigrave{}}\NormalTok{),}
+    \AttributeTok{names\_to =} \StringTok{"Rested"}\NormalTok{,}
+    \AttributeTok{values\_to =} \StringTok{"Mean\_DASS"}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{Rested =} \FunctionTok{factor}\NormalTok{(Rested,}
+                    \AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"1"}\NormalTok{, }\StringTok{"2"}\NormalTok{, }\StringTok{"3"}\NormalTok{),}
+                    \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"Somewhat"}\NormalTok{, }\StringTok{"No"}\NormalTok{))}
+\NormalTok{  )}
+
+
+\NormalTok{anova\_model }\OtherTok{\textless{}{-}} \FunctionTok{aov}\NormalTok{(Mean\_DASS }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Rested, }\AttributeTok{data =}\NormalTok{ dat\_long)}
+\NormalTok{anova\_summary }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(anova\_model)}
+\NormalTok{anova\_summary}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             Df Sum Sq Mean Sq F value   Pr(>F)    
+## Rested       2  4.790  2.3950   29.66 1.11e-09 ***
+## Residuals   60  4.846  0.0808                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{anova\_table }\OtherTok{\textless{}{-}}\NormalTok{ anova\_summary[[}\DecValTok{1}\NormalTok{]]}
+\NormalTok{F\_value }\OtherTok{\textless{}{-}}\NormalTok{ anova\_table[[}\StringTok{"F value"}\NormalTok{]][}\DecValTok{1}\NormalTok{]}
+\NormalTok{df1 }\OtherTok{\textless{}{-}}\NormalTok{ anova\_table[[}\StringTok{"Df"}\NormalTok{]][}\DecValTok{1}\NormalTok{]     }\CommentTok{\# Between groups}
+\NormalTok{df2 }\OtherTok{\textless{}{-}}\NormalTok{ anova\_table[[}\StringTok{"Df"}\NormalTok{]][}\DecValTok{2}\NormalTok{]     }\CommentTok{\# Within groups}
+\NormalTok{alpha }\OtherTok{\textless{}{-}} \FloatTok{0.05}
+
+\NormalTok{F\_critical }\OtherTok{\textless{}{-}} \FunctionTok{qf}\NormalTok{(}\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ alpha, df1, df2)}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"F ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(F\_value, }\DecValTok{3}\NormalTok{),}
+    \StringTok{"| F\_critical ="}\NormalTok{, }\FunctionTok{round}\NormalTok{(F\_critical, }\DecValTok{3}\NormalTok{),}
+    \StringTok{"| df1 ="}\NormalTok{, df1, }\StringTok{"| df2 ="}\NormalTok{, df2, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## F = 29.655 | F_critical = 3.15 | df1 = 2 | df2 = 60
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (F\_value }\SpecialCharTok{\textgreater{}}\NormalTok{ F\_critical) \{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"Decision: Reject Ho  There are significant differences among the Rested groups.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"Decision: Fail to reject Ho — No significant differences among the Rested groups.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Decision: Reject Ho  There are significant differences among the Rested groups.
+\end{verbatim}
+
+\subsection{Research Question 4}\label{research-question-4}
+
+\subsubsection{Install Sampling and Survey
+Package}\label{install-sampling-and-survey-package}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{options}\NormalTok{(}\AttributeTok{repos =} \FunctionTok{c}\NormalTok{(}\AttributeTok{CRAN =} \StringTok{"https://cloud.r{-}project.org"}\NormalTok{))}
+\FunctionTok{install.packages}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{, }\StringTok{"psych"}\NormalTok{, }\StringTok{"effectsize"}\NormalTok{, }\StringTok{"knitr"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Load the Required
+Libraries}\label{load-the-required-libraries}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(psych)}
+\FunctionTok{library}\NormalTok{(effectsize)}
+\FunctionTok{library}\NormalTok{(knitr)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Import the Data File into
+R}\label{import-the-data-file-into-r}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Read/Import the data file in R}
+\NormalTok{student\_mental\_health }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"student\_mental\_health.csv"}\NormalTok{)[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{1193}\NormalTok{, ]}
+\FunctionTok{attach}\NormalTok{(student\_mental\_health)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Select \& Prepare PSS
+Variables}\label{select-prepare-pss-variables}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Select only the relevant columns}
+\NormalTok{pss\_vars\_pre  }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}Pre\_PSS\_\textquotesingle{}}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{)}
+\NormalTok{pss\_vars\_post }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}Post\_PSS\_\textquotesingle{}}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{)}
+
+\NormalTok{pss\_data }\OtherTok{\textless{}{-}}\NormalTok{ student\_mental\_health }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(}\FunctionTok{c}\NormalTok{(pss\_vars\_pre, pss\_vars\_post)))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Reverse-Code Items 4, 5, 7,
+8}\label{reverse-code-items-4-5-7-8}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{reverse\_items }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{8}\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in}\NormalTok{ reverse\_items) \{}
+\NormalTok{    pss\_data[[}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}Pre\_PSS\_\textquotesingle{}}\NormalTok{, i)]] }\OtherTok{\textless{}{-}} \DecValTok{4} \SpecialCharTok{{-}}\NormalTok{ pss\_data[[}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}Pre\_PSS\_\textquotesingle{}}\NormalTok{, i)]]}
+\NormalTok{    pss\_data[[}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}Post\_PSS\_\textquotesingle{}}\NormalTok{, i)]] }\OtherTok{\textless{}{-}} \DecValTok{4} \SpecialCharTok{{-}}\NormalTok{ pss\_data[[}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}Post\_PSS\_\textquotesingle{}}\NormalTok{, i)]]}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Compute Total Scores}\label{compute-total-scores}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pss\_data }\OtherTok{\textless{}{-}}\NormalTok{ pss\_data }\SpecialCharTok{\%\textgreater{}\%}
+\FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{pre\_total =} \FunctionTok{rowSums}\NormalTok{(}\FunctionTok{select}\NormalTok{(., }\FunctionTok{all\_of}\NormalTok{(pss\_vars\_pre)), }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+    \AttributeTok{post\_total =} \FunctionTok{rowSums}\NormalTok{(}\FunctionTok{select}\NormalTok{(., }\FunctionTok{all\_of}\NormalTok{(pss\_vars\_post)), }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Descriptive Statistics}\label{descriptive-statistics}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{describe}\NormalTok{(pss\_data[, }\FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}pre\_total\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}post\_total\textquotesingle{}}\NormalTok{)])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            vars    n  mean   sd median trimmed  mad min max range  skew
+## pre_total     1 1193 22.51 6.79     23   22.50 5.93   0  42    42  0.01
+## post_total    2 1193 25.38 6.98     26   25.44 7.41   0  42    42 -0.14
+##            kurtosis  se
+## pre_total     -0.03 0.2
+## post_total     0.02 0.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Boxplot comparison (pre shown on the left)}
+\NormalTok{pss\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{c}\NormalTok{(pre\_total, post\_total),}
+               \AttributeTok{names\_to =} \StringTok{\textquotesingle{}Period\textquotesingle{}}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{\textquotesingle{}Score\textquotesingle{}}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Period =} \FunctionTok{factor}\NormalTok{(Period, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}pre\_total\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}post\_total\textquotesingle{}}\NormalTok{))) }\SpecialCharTok{\%\textgreater{}\%}  \CommentTok{\# enforce order}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Period, }\AttributeTok{y =}\NormalTok{ Score, }\AttributeTok{fill =}\NormalTok{ Period)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{\textquotesingle{}Perceived Stress Levels Before vs After COVID{-}19\textquotesingle{}}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{\textquotesingle{}PSS Total Score\textquotesingle{}}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{\textquotesingle{}\textquotesingle{}}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-55-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# QQ plots for normality check}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))  }\CommentTok{\# two plots side by side}
+
+\FunctionTok{qqnorm}\NormalTok{(pss\_data}\SpecialCharTok{$}\NormalTok{pre\_total, }\AttributeTok{main =} \StringTok{\textquotesingle{}QQ Plot {-} Pre{-}COVID PSS\textquotesingle{}}\NormalTok{)}
+\FunctionTok{qqline}\NormalTok{(pss\_data}\SpecialCharTok{$}\NormalTok{pre\_total, }\AttributeTok{col =} \StringTok{\textquotesingle{}red\textquotesingle{}}\NormalTok{)}
+
+\FunctionTok{qqnorm}\NormalTok{(pss\_data}\SpecialCharTok{$}\NormalTok{post\_total, }\AttributeTok{main =} \StringTok{\textquotesingle{}QQ Plot {-} Post{-}COVID PSS\textquotesingle{}}\NormalTok{)}
+\FunctionTok{qqline}\NormalTok{(pss\_data}\SpecialCharTok{$}\NormalTok{post\_total, }\AttributeTok{col =} \StringTok{\textquotesingle{}red\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-55-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{))  }\CommentTok{\# reset layout}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Paired t-Test}\label{paired-t-test-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{t\_test\_result }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(pss\_data}\SpecialCharTok{$}\NormalTok{pre\_total, pss\_data}\SpecialCharTok{$}\NormalTok{post\_total, }\AttributeTok{paired =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{t\_test\_result}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Paired t-test
+## 
+## data:  pss_data$pre_total and pss_data$post_total
+## t = -15.13, df = 1192, p-value < 2.2e-16
+## alternative hypothesis: true mean difference is not equal to 0
+## 95 percent confidence interval:
+##  -3.241302 -2.497173
+## sample estimates:
+## mean difference 
+##       -2.869237
+\end{verbatim}
+
+\subsubsection{Effect Size}\label{effect-size}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cohens\_d}\NormalTok{(pss\_data}\SpecialCharTok{$}\NormalTok{post\_total, pss\_data}\SpecialCharTok{$}\NormalTok{pre\_total, }\AttributeTok{paired =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Cohen's d |       95% CI
+## ------------------------
+## 0.44      | [0.38, 0.50]
+\end{verbatim}
+
+\subsubsection{Result}\label{result}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Compute descriptive statistics}
+\NormalTok{desc\_stats }\OtherTok{\textless{}{-}} \FunctionTok{describe}\NormalTok{(pss\_data[, }\FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}pre\_total\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}post\_total\textquotesingle{}}\NormalTok{)])}
+\CommentTok{\# Round all numeric columns to 4 decimals}
+\NormalTok{desc\_summary }\OtherTok{\textless{}{-}}\NormalTok{ desc\_stats }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(vars, n, mean, sd, median, min, max, range, skew, kurtosis) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.numeric), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{round}\NormalTok{(., }\DecValTok{4}\NormalTok{)))}
+
+\CommentTok{\# Display formatted table}
+\FunctionTok{kable}\NormalTok{(desc\_summary,}
+      \AttributeTok{caption =} \StringTok{"Descriptive Statistics for Pre{-} and Post{-}COVID Perceived Stress Scores"}\NormalTok{,}
+      \AttributeTok{align =} \StringTok{\textquotesingle{}c\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1310}}
+  >{\centering\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0714}}
+  >{\centering\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0714}}
+  >{\centering\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1071}}
+  >{\centering\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
+  >{\centering\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0952}}
+  >{\centering\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0595}}
+  >{\centering\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0595}}
+  >{\centering\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0833}}
+  >{\centering\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1071}}
+  >{\centering\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1190}}@{}}
+\caption{Descriptive Statistics for Pre- and Post-COVID Perceived Stress
+Scores}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+vars
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+n
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+mean
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+sd
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+median
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+min
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+max
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+range
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+skew
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+kurtosis
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+vars
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+n
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+mean
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+sd
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+median
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+min
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+max
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+range
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+skew
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+kurtosis
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+pre\_total & 1 & 1193 & 22.5063 & 6.7924 & 23 & 0 & 42 & 42 & 0.0148 &
+-0.0308 \\
+post\_total & 2 & 1193 & 25.3755 & 6.9850 & 26 & 0 & 42 & 42 & -0.1448 &
+0.0243 \\
+\end{longtable}
+
+\subsection{Research Question 5}\label{research-question-5}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Data }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"student\_mental\_health.csv"}\NormalTok{)[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{1193}\NormalTok{, ]}
+
+\NormalTok{ders\_items }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"DERS\_"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{16}\NormalTok{)}
+\NormalTok{imp\_items }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"Hobbies\_Imp\_"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{8}\NormalTok{)}
+\NormalTok{time\_items }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"Hobbies\_Time\_"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{8}\NormalTok{)}
+
+\NormalTok{Data\_filtered }\OtherTok{\textless{}{-}}\NormalTok{ Data }\SpecialCharTok{\%\textgreater{}\%}
+\FunctionTok{filter}\NormalTok{(Catch\_question }\SpecialCharTok{!=} \StringTok{"NA"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\FunctionTok{mutate}\NormalTok{(}
+\AttributeTok{DERS\_mean =} \FunctionTok{rowMeans}\NormalTok{(}\FunctionTok{select}\NormalTok{(., }\FunctionTok{all\_of}\NormalTok{(ders\_items)), }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+\AttributeTok{Imp\_overall =} \FunctionTok{rowMeans}\NormalTok{(}\FunctionTok{select}\NormalTok{(., }\FunctionTok{all\_of}\NormalTok{(imp\_items)), }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+\AttributeTok{Time\_overall =} \FunctionTok{rowMeans}\NormalTok{(}\FunctionTok{select}\NormalTok{(., }\FunctionTok{all\_of}\NormalTok{(time\_items)), }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{)}
+
+\NormalTok{Data\_analysis }\OtherTok{\textless{}{-}}\NormalTok{ Data\_filtered }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(DERS\_mean))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Screening All Hobby
+Variables}\label{screening-all-hobby-variables-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all\_hobby\_vars }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(imp\_items, time\_items, }\StringTok{"Imp\_overall"}\NormalTok{, }\StringTok{"Time\_overall"}\NormalTok{)}
+
+\NormalTok{hobby\_table }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+\AttributeTok{Variable =}\NormalTok{ all\_hobby\_vars,}
+\AttributeTok{Mean =} \FunctionTok{sapply}\NormalTok{(Data\_analysis[all\_hobby\_vars], mean, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+\AttributeTok{SD =} \FunctionTok{sapply}\NormalTok{(Data\_analysis[all\_hobby\_vars], sd, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+\AttributeTok{n =} \FunctionTok{sapply}\NormalTok{(Data\_analysis[all\_hobby\_vars], }\ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{sum}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(x)))}
+\NormalTok{)}
+
+\FunctionTok{kable}\NormalTok{(hobby\_table, }\AttributeTok{digits =} \DecValTok{3}\NormalTok{,}
+\AttributeTok{caption =} \StringTok{"Means and Standard Deviations for All Hobby Variables"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrr@{}}
+\caption{Means and Standard Deviations for All Hobby
+Variables}\tabularnewline
+\toprule\noalign{}
+Variable & Mean & SD & n \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Variable & Mean & SD & n \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Hobbies\_Imp\_1 & 2.267 & 1.307 & 748 \\
+Hobbies\_Imp\_2 & 2.116 & 1.091 & 748 \\
+Hobbies\_Imp\_3 & 2.586 & 1.111 & 748 \\
+Hobbies\_Imp\_4 & 3.229 & 1.017 & 748 \\
+Hobbies\_Imp\_5 & 2.961 & 1.115 & 748 \\
+Hobbies\_Imp\_6 & 4.167 & 0.798 & 748 \\
+Hobbies\_Imp\_7 & 2.418 & 0.989 & 748 \\
+Hobbies\_Imp\_8 & 3.270 & 1.063 & 748 \\
+Hobbies\_Time\_1 & 1.717 & 1.131 & 748 \\
+Hobbies\_Time\_2 & 1.509 & 0.925 & 748 \\
+Hobbies\_Time\_3 & 2.028 & 1.293 & 748 \\
+Hobbies\_Time\_4 & 4.162 & 1.388 & 748 \\
+Hobbies\_Time\_5 & 1.999 & 1.336 & 748 \\
+Hobbies\_Time\_6 & 5.352 & 1.501 & 748 \\
+Hobbies\_Time\_7 & 1.488 & 0.840 & 748 \\
+Hobbies\_Time\_8 & 2.485 & 1.370 & 748 \\
+Imp\_overall & 2.877 & 0.468 & 748 \\
+Time\_overall & 2.592 & 0.495 & 748 \\
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{screen\_results }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+\AttributeTok{Variable =}\NormalTok{ all\_hobby\_vars,}
+\AttributeTok{r =} \ConstantTok{NA\_real\_}\NormalTok{,}
+\AttributeTok{p\_value =} \ConstantTok{NA\_real\_}\NormalTok{,}
+\AttributeTok{n =} \ConstantTok{NA\_integer\_}
+\NormalTok{)}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \FunctionTok{seq\_along}\NormalTok{(all\_hobby\_vars)) \{}
+\NormalTok{v }\OtherTok{\textless{}{-}}\NormalTok{ all\_hobby\_vars[i]}
+\NormalTok{tmp }\OtherTok{\textless{}{-}}\NormalTok{ Data\_analysis[, }\FunctionTok{c}\NormalTok{(}\StringTok{"DERS\_mean"}\NormalTok{, v)]}
+\NormalTok{tmp }\OtherTok{\textless{}{-}}\NormalTok{ tmp[}\FunctionTok{complete.cases}\NormalTok{(tmp), ]}
+\NormalTok{test }\OtherTok{\textless{}{-}} \FunctionTok{cor.test}\NormalTok{(tmp}\SpecialCharTok{$}\NormalTok{DERS\_mean, tmp[[v]])}
+
+\NormalTok{screen\_results}\SpecialCharTok{$}\NormalTok{r[i] }\OtherTok{\textless{}{-}} \FunctionTok{unname}\NormalTok{(test}\SpecialCharTok{$}\NormalTok{estimate)}
+\NormalTok{screen\_results}\SpecialCharTok{$}\NormalTok{p\_value[i] }\OtherTok{\textless{}{-}}\NormalTok{ test}\SpecialCharTok{$}\NormalTok{p.value}
+\NormalTok{screen\_results}\SpecialCharTok{$}\NormalTok{n[i] }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(tmp)}
+\NormalTok{\}}
+
+\NormalTok{screen\_results }\OtherTok{\textless{}{-}}\NormalTok{ screen\_results }\SpecialCharTok{\%\textgreater{}\%}
+\FunctionTok{mutate}\NormalTok{(}\AttributeTok{abs\_r =} \FunctionTok{abs}\NormalTok{(r)) }\SpecialCharTok{\%\textgreater{}\%}
+\FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(abs\_r))}
+
+\FunctionTok{kable}\NormalTok{(screen\_results,}
+\AttributeTok{digits =} \DecValTok{3}\NormalTok{,}
+\AttributeTok{caption =} \StringTok{"Correlations Between DERS\_mean and All Hobby Variables (Screening Table)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{Correlations Between DERS\_mean and All Hobby Variables
+(Screening Table)}\tabularnewline
+\toprule\noalign{}
+Variable & r & p\_value & n & abs\_r \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Variable & r & p\_value & n & abs\_r \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Hobbies\_Time\_1 & -0.120 & 0.001 & 748 & 0.120 \\
+Hobbies\_Imp\_4 & 0.108 & 0.003 & 748 & 0.108 \\
+Hobbies\_Imp\_1 & -0.067 & 0.065 & 748 & 0.067 \\
+Hobbies\_Imp\_8 & 0.067 & 0.066 & 748 & 0.067 \\
+Hobbies\_Time\_4 & 0.063 & 0.084 & 748 & 0.063 \\
+Imp\_overall & 0.050 & 0.174 & 748 & 0.050 \\
+Hobbies\_Imp\_3 & 0.046 & 0.206 & 748 & 0.046 \\
+Time\_overall & -0.034 & 0.357 & 748 & 0.034 \\
+Hobbies\_Time\_2 & -0.027 & 0.466 & 748 & 0.027 \\
+Hobbies\_Time\_5 & -0.025 & 0.488 & 748 & 0.025 \\
+Hobbies\_Time\_6 & -0.021 & 0.564 & 748 & 0.021 \\
+Hobbies\_Imp\_2 & 0.019 & 0.608 & 748 & 0.019 \\
+Hobbies\_Imp\_6 & 0.017 & 0.643 & 748 & 0.017 \\
+Hobbies\_Imp\_5 & 0.011 & 0.767 & 748 & 0.011 \\
+Hobbies\_Time\_7 & 0.011 & 0.770 & 748 & 0.011 \\
+Hobbies\_Time\_8 & -0.005 & 0.884 & 748 & 0.005 \\
+Hobbies\_Imp\_7 & -0.005 & 0.896 & 748 & 0.005 \\
+Hobbies\_Time\_3 & 0.003 & 0.944 & 748 & 0.003 \\
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{screen\_focus }\OtherTok{\textless{}{-}}\NormalTok{ screen\_results }\SpecialCharTok{\%\textgreater{}\%}
+\FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(r),}
+\NormalTok{abs\_r }\SpecialCharTok{\textgreater{}=} \FloatTok{0.10}\NormalTok{,}
+\NormalTok{p\_value }\SpecialCharTok{\textless{}} \FloatTok{0.05}\NormalTok{)}
+
+\FunctionTok{kable}\NormalTok{(screen\_focus,}
+\AttributeTok{digits =} \DecValTok{3}\NormalTok{,}
+\AttributeTok{caption =} \StringTok{"Hobby Variables With Significant Correlation With DERS\_mean"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{Hobby Variables With Significant Correlation With
+DERS\_mean}\tabularnewline
+\toprule\noalign{}
+Variable & r & p\_value & n & abs\_r \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Variable & r & p\_value & n & abs\_r \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Hobbies\_Time\_1 & -0.120 & 0.001 & 748 & 0.120 \\
+Hobbies\_Imp\_4 & 0.108 & 0.003 & 748 & 0.108 \\
+\end{longtable}
+
+\subsubsection{Correlation Tests}\label{correlation-tests-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cor\_time1 }\OtherTok{\textless{}{-}} \FunctionTok{cor.test}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ DERS\_mean }\SpecialCharTok{+}\NormalTok{ Hobbies\_Time\_1, }\AttributeTok{data =}\NormalTok{ Data\_analysis)}
+\NormalTok{cor\_imp4  }\OtherTok{\textless{}{-}} \FunctionTok{cor.test}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ DERS\_mean }\SpecialCharTok{+}\NormalTok{ Hobbies\_Imp\_4, }\AttributeTok{data =}\NormalTok{ Data\_analysis)}
+
+\NormalTok{cor\_time1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  DERS_mean and Hobbies_Time_1
+## t = -3.3048, df = 746, p-value = 0.0009959
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.1901676 -0.0488571
+## sample estimates:
+##        cor 
+## -0.1201208
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cor\_imp4}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  DERS_mean and Hobbies_Imp_4
+## t = 2.969, df = 746, p-value = 0.003083
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.03666589 0.17836881
+## sample estimates:
+##       cor 
+## 0.1080662
+\end{verbatim}
+
+\subsubsection{Linear Models}\label{linear-models-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lm\_time1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(DERS\_mean }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Hobbies\_Time\_1, }\AttributeTok{data =}\NormalTok{ Data\_analysis)}
+\NormalTok{lm\_imp4 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(DERS\_mean }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Hobbies\_Imp\_4, }\AttributeTok{data =}\NormalTok{ Data\_analysis)}
+
+\FunctionTok{summary}\NormalTok{(lm\_time1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = DERS_mean ~ Hobbies_Time_1, data = Data_analysis)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.9011 -0.7136 -0.0261  0.6964  2.1840 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)     3.06112    0.06065  50.471  < 2e-16 ***
+## Hobbies_Time_1 -0.09752    0.02951  -3.305 0.000996 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9123 on 746 degrees of freedom
+## Multiple R-squared:  0.01443,    Adjusted R-squared:  0.01311 
+## F-statistic: 10.92 on 1 and 746 DF,  p-value: 0.0009959
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{anova}\NormalTok{(lm\_time1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: DERS_mean
+##                 Df Sum Sq Mean Sq F value    Pr(>F)    
+## Hobbies_Time_1   1   9.09  9.0907  10.922 0.0009959 ***
+## Residuals      746 620.94  0.8324                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(lm\_imp4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = DERS_mean ~ Hobbies_Imp_4, data = Data_analysis)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.00416 -0.71903 -0.03153  0.69110  2.22623 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    2.57850    0.11130  23.167  < 2e-16 ***
+## Hobbies_Imp_4  0.09763    0.03288   2.969  0.00308 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9136 on 746 degrees of freedom
+## Multiple R-squared:  0.01168,    Adjusted R-squared:  0.01035 
+## F-statistic: 8.815 on 1 and 746 DF,  p-value: 0.003083
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{anova}\NormalTok{(lm\_imp4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: DERS_mean
+##                Df Sum Sq Mean Sq F value   Pr(>F)   
+## Hobbies_Imp_4   1   7.36  7.3576   8.815 0.003083 **
+## Residuals     746 622.67  0.8347                    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\subsubsection{Visualizations}\label{visualizations-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(DERS\_mean }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Hobbies\_Time\_1,}
+\AttributeTok{data =}\NormalTok{ Data\_analysis,}
+\AttributeTok{xlab =} \StringTok{"Hours Spent on Athletics (Hobbies\_Time\_1)"}\NormalTok{,}
+\AttributeTok{ylab =} \StringTok{"DERS Mean"}\NormalTok{,}
+\AttributeTok{main =} \StringTok{"DERS\_mean vs Hobbies\_Time\_1"}\NormalTok{)}
+
+\FunctionTok{abline}\NormalTok{(lm\_time1, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-64-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(DERS\_mean }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Hobbies\_Imp\_4,}
+\AttributeTok{data =}\NormalTok{ Data\_analysis,}
+\AttributeTok{xlab =} \StringTok{"Importance of Recreational Streaming (Hobbies\_Imp\_4)"}\NormalTok{,}
+\AttributeTok{ylab =} \StringTok{"DERS Mean"}\NormalTok{,}
+\AttributeTok{main =} \StringTok{"DERS\_mean vs Hobbies\_Imp\_4"}\NormalTok{)}
+
+\FunctionTok{abline}\NormalTok{(lm\_imp4, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{final_analysis_files/figure-latex/unnamed-chunk-64-2.pdf}
+
+\end{document}

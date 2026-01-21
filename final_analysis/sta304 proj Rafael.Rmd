@@ -1,0 +1,86 @@
+---
+title: "Seeking Social Support correlations"
+author: "Rafael Serrano Aparicio"
+date: "2025-11-12"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+load("Clean_Data.RData")
+library(splines)
+set.seed(888)
+y.Program = y[,"Program"]
+y.Program[y.Program == 1] <- "Busn"
+y.Program[y.Program == 2] <- "Edu"
+y.Program[y.Program == 3] <- "Engin"
+y.Program[y.Program == 4] <- "Arts"
+y.Program[y.Program == 5] <- "Hum,soc dev"
+y.Program[y.Program == 6] <- "Hum"
+y.Program[y.Program == 7] <- "Sc"
+y.Program[y.Program == 8] <- "Soc sc"
+y.Sex = y[,"Sex"]
+y.Sex[y.Sex==1] <- "Male"
+y.Sex[y.Sex==2] <- "Female"
+y.Sex[y.Sex==3] <- "Intersex"
+y.International = y[,"International"]
+y.International[y.International==1] <- "Yes"
+y.International[y.International==2] <- "No"
+survey.data = data.frame(DERS=rowSums(y[,81:96]),SSS=rowMeans(y[,56:67]), Program=y.Program,Sex=y.Sex,International=y.International)
+```
+
+Today I want to explore if university students seek different amounts of social support depending on their program. I will also explore other relations with seeking social support (SSS) if program does not seem very interesting.
+
+First let's see a box plot of the relation between SSS and Program.
+
+```{r}
+boxplot(SSS~Program,data=survey.data,cex.axis=0.75)
+
+```
+As we can see the box plot looks similar with small variations on the mean. The only box plot that stands out is the one for "Human and social development" since the results seem much more centered. However that could just be a result of the small sample size.
+Let's do an ANOVA test to see if these differences in means are statistically significant. We will assume that the variances are not equal because of the outlying box plot.
+```{r}
+oneway.test(SSS~Program,data=survey.data, var.equal = FALSE)
+```
+The p-value is quite large which means that program is most likely not very strongly correlated with seeking social support.
+
+Well let's look at other things then, starting with sex.
+```{r}
+boxplot(SSS~Sex,data=survey.data)
+```
+They seem maybe slightly different, let's do a t test to confirm if the difference is statistically relevant.
+```{r}
+t.test(survey.data[survey.data$Sex=="Female","SSS"],survey.data[survey.data$Sex=="Male","SSS"], "two.sided", 0)
+```
+The p-value is very close to 0.05 but it's still not enough. This means that most likely sex is not correlated with seeking social support. (And if is correclated it has such a small effect that it can be compared to a measurement error)
+
+Let's see if maybe international students have more of a difficulty seeking social support.
+```{r}
+boxplot(SSS~International,data=survey.data)
+```
+It doesn't seem to affect much appart from the fact that international students are more centered which can be attributed to a small sample size.
+
+Lastly let's see if how easy it is for someone to regulate their emotions affects how much they seek for social support. Maybe people who struggle more with emotional regulation would seek more social support (or maybe less).
+```{r}
+boxplot(SSS~DERS, data=survey.data)
+```
+The boxplots seem to reveal a very slight trend downwards when the DERS score is higher than 64. Which would seem to suggest that people that have a high difficulty regulating emotion have more difficulty seeking social support.
+```{r}
+boxplot(SSS~DERS>64, data=survey.data)
+```
+This boxplot reveals that there is a difference in mean SSS scores between those who have a DERS score less than or equal to 64 and those with more than 64.
+Let's do a t test to confirm that difference is statistically significant.
+
+```{r}
+t.test(survey.data[survey.data$DERS<=64,"SSS"],survey.data[survey.data$DERS>64,"SSS"], "two.sided", 0)
+```
+The t test reveals that the difference between those with a DERS score higher than 64 and those with a DERS score lower than 65 is statistically significant. In fact, it is very statistically significant with a p-value of 1.816e-06.
+This implies that there is a statistically significant correlation between high DERS scores and low SSS scores.
+
+This is interesting and could be explained in various ways, my personal thoery would be that it is caused by the fact that a difficulty regulating emotion could lead to a difficulty in maintaining relationships. This could mean that those who have a difficulty regulating emotions simply have less soruces from which to seek social support from. However, this is just speculation and further research would be needed.
+
+
+
+In conclusion, it would seem that seeking social support is a very personal thing and that two people that are very similar could differ wildly on this. The amount of social support sought by university students is not affected by their program, sex, or even if they are an international student or not. However, university students with high difficulty regulating emotions do, on average, seek less social support than those with lower difficulty regulating emotions.

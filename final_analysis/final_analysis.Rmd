@@ -1,0 +1,1323 @@
+---
+title: ""
+author: ""
+date: ""
+output:
+  pdf_document:
+    keep_tex: true
+    latex_engine: xelatex
+header-includes:
+  - \usepackage{adjustbox}
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+install.packages('readxl')
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(dplyr)
+library(tidyr)
+library(readxl)
+library(writexl)
+library(psych)
+library(effectsize)
+```
+\begin{titlepage}
+    \centering
+    {\Huge \textbf{Stress, Sleep, Emotion Regulation, and Support-Seeking: Insights from a Large University Mental-Health Survey}\par}
+    \vspace{2cm}
+
+    {\Large\textbf{Group Members:}}\par
+    {\large Andy Chen \\ Krzysztof Oleksiak \\ Rafael Serrano Aparicio \\ Jeffrey Yan Man Fong \\ Danny Han \par}
+
+    \vfill
+    {\large \today\par}
+\end{titlepage}
+
+
+\newpage
+
+
+# Abstract
+
+This project analyzes data from the University Student Mental Health survey, a large-scale study of Canadian undergraduate students collected in Fall 2020 to measure psychological wellbeing, stress, emotional regulation, sleep behaviours, and social support. Using validated scales—including the DERS-16 for emotional regulation, the Seeking Social Support scale, the DASS-21, and the Perceived Stress Scale—we examined four key relationships: differences in emotional-regulation difficulties across academic programs, differences in social-support seeking across programs, the association between restfulness and mental-health symptoms, and changes in perceived stress before versus after the COVID-19 outbreak. Our analyses revealed minimal or non-significant differences across programs for both emotional-regulation difficulties and social-support seeking, a meaningful link between feeling well-rested and lower DASS symptom scores, and a significant increase in perceived stress following the onset of COVID-19. These findings suggest that individual wellbeing factors and external stressors may exert stronger influences on student mental health than academic program alone.
+
+
+# Introduction
+
+The *University Student Mental Health* dataset contains survey responses from 1,192 undergraduate students across Canada, collected between September 22 and October 30, 2020. Recruitment occurred online through Facebook university groups, Reddit, Instagram, Twitter, and research-participant portals such as REACH BC and the CPA R2P2 portal. Participants completed a Qualtrics survey designed to assess multiple aspects of student wellbeing during the COVID-19 pandemic, including emotional regulation, perceived stress, depression–anxiety–stress symptoms, sleep behaviour, social-support seeking, physical activity, and demographic context. The dataset includes 147 variables spanning validated psychological scales, behavioural measures, and demographic information, offering a rich snapshot of undergraduate wellbeing during a period of significant external stress.
+
+The purpose of this project is to investigate four key research questions regarding student mental health:
+
+1. **Is there a correlation between the Program of Study and the responses to the Difficulties in Emotional Regulation Scale (DERS) Questionnaire?**
+2. **Do students in different academic programs differ in how much social support they seek?**
+3. **Is feeling well-rested associated with differences in mental-health symptoms measured by the DASS-21?**
+4. **Did students’ perceived stress levels change significantly from before to after the COVID-19 outbreak, based on pre/post PSS scores?**
+5. **Is there a relationship between students’ emotional-regulation difficulties (DERS) and their hobby patterns, including both the importance they place on different hobbies and the amount of time they spend on them?**
+
+A focused subset of variables was selected from the full dataset, and each variable was cleaned, recoded, and scored according to the documentation provided by the dataset creators. Program of Study was treated as a categorical factor, originally coded 1–8 and recoded into descriptive program labels. The **Rested** variable was treated as an ordered factor with levels “Yes,” “Somewhat,” and “No.” Psychological scales were scored using their validated scoring procedures: DERS-16 items were summed, SSS items were averaged, DASS-21 items were summed and doubled for subscale totals, and PSS items were summed with designated items reverse-scored. Missing data were handled using listwise deletion for the analyses. All scoring procedures followed the official scale documentation.
+
+\newpage
+
+### Mini Codebook
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{p{2.6cm} p{3.8cm} p{3.0cm} p{4.0cm} p{3.3cm}}
+\toprule
+\textbf{Variable} & \textbf{Description} & \textbf{Coding / Scale} & \textbf{Recoding / Scoring} & \textbf{Missing Treatment} \\
+\midrule
+Program & Student’s academic program of study & 1–8 coded as program categories & Recoded into descriptive labels (e.g., Business, Education, Engineering, etc.) & Listwise deletion \\
+DERS\_1--DERS\_16 & Difficulties in Emotional Regulation Scale items & 5-point Likert (1–5) & Averaged into DERS\_mean score; higher = more dysregulation & Listwise deletion \\
+SSS\_1--SSS\_12 & Seeking Social Support scale & 5-point Likert (1–5) & Averaged into total SSS score & Listwise deletion \\
+Rested & Self-reported restfulness upon waking & 1 = Yes, 2 = Somewhat, 3 = No & Treated as ordered factor & Listwise deletion \\
+DASS\_1--DASS\_21 & Depression Anxiety Stress Scale & 4-point Likert (0–3) & Summed and doubled for subscales; overall DASS average computed & Listwise deletion \\
+Pre\_PSS\_1--Pre\_PSS\_10 & Perceived Stress Scale (before COVID-19) & 0–4 Likert & Items 4, 5, 7, 8 reverse-scored; summed into total & Listwise deletion \\
+Post\_PSS\_1--Post\_PSS\_10 & Perceived Stress Scale (after COVID-19) & 0–4 Likert & Items 4, 5, 7, 8 reverse-scored; summed into total & Listwise deletion \\
+Hobbies\_Imp\_1--Hobbies\_Imp\_8 & Importance of various hobbies & 5-point Likert (1–5) & Averaged into Imp\_overall; also used individually & Listwise deletion \\
+Hobbies\_Time\_1--Hobbies\_Time\_8 & Weekly time spent on hobbies & 7-point Likert (1–7) & Averaged into Time\_overall; also used individually & Listwise deletion \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\newpage
+
+
+# Research Question 1: Program of Study and Emotional Regulation (DERS)
+
+This section examines whether emotional-regulation difficulties differ across academic programs. The DERS-16 scale measures how frequently students experience problems with emotional regulation, with higher scores reflecting more frequent difficulties. Each participant’s average DERS score was computed by taking the mean across the 16 DERS items.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+Data <- read.csv("student_mental_health.csv")[1:1193, ]
+
+ders_items <- paste0("DERS_", 1:16)
+
+# Keep only valid responses
+
+ders_subset <- Data %>%
+filter(Catch_question != "NA") %>%
+mutate(
+DERS_mean = rowMeans(select(., all_of(ders_items)), na.rm = TRUE),
+DERS_median = apply(select(., all_of(ders_items)), 1, median, na.rm = TRUE),
+Program = factor(Program,
+labels = c("Business", "Education", "Engineering",
+"Fine Arts", "Human & Social Dev",
+"Humanities", "Sciences", "Social Sciences"))
+)
+```
+
+### Distribution of DERS Scores Across Programs
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(ders_subset, aes(x = Program, y = DERS_mean, fill = Program)) +
+geom_boxplot() +
+labs(
+title = "Distribution of Average DERS Scores by Program",
+x = "Program of Study",
+y = "Average DERS Score"
+) +
+theme_minimal() +
+theme(
+plot.title = element_text(hjust = 0.5),
+axis.text.x = element_blank(),
+legend.position = "none"
+)
+```
+The distribution of DERS scores appears broadly similar across programs, though Education shows a slightly higher median compared to others. The overlap suggests differences may be modest, requiring statistical testing.
+
+### ANOVA Test
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+anova_model <- aov(DERS_mean ~ Program, data = ders_subset)
+summary(anova_model)
+```
+The one-way ANOVA indicates statistically significant differences among at least some program means (α = 0.05). This suggests that average emotional-regulation difficulty varies slightly across academic fields, though the effect appears small.
+
+### Confidence Intervals for Mean DERS Scores
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ci_df <- ders_subset %>%
+group_by(Program) %>%
+summarize(
+mean  = mean(DERS_mean, na.rm = TRUE),
+lower = t.test(DERS_mean)$conf.int[1],
+upper = t.test(DERS_mean)$conf.int[2]
+)
+
+ggplot(ci_df, aes(x = Program, y = mean)) +
+geom_point(size = 2) +
+geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2) +
+coord_flip() +
+labs(
+title = "95% Confidence Intervals for Mean DERS Scores",
+x = "Program",
+y = "Mean DERS Score"
+) +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5))
+```
+Programs show substantial overlap in confidence intervals, reinforcing that while differences exist, they are relatively small in magnitude.
+
+### Summary Statistics
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+summary_ders_mean   <- summary(ders_subset$DERS_mean)
+summary_ders_median <- summary(ders_subset$DERS_median)
+
+summary_ders_mean
+summary_ders_median
+```
+
+### Interpretation
+The mean DERS score across students lies between 2 and 3, meaning the average respondent experiences emotional-regulation difficulties somewhere between “sometimes” and “about half the time.” The median DERS response (3) indicates that half of all students report moderate emotional-regulation difficulty (36%–65% of the time). Overall, the data suggest that emotional-regulation challenges are fairly common across programs.
+
+
+\newpage
+
+
+# Research Question 2: Program of Study and Seeking Social Support (SSS)
+
+This analysis investigates whether the amount of social support students seek differs across academic programs. The Seeking Social Support (SSS) scale is a 12-item instrument scored on a 1–5 Likert scale, where higher values indicate greater levels of support-seeking behavior. For each participant, we calculated the mean SSS score across all items.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+load("Clean_Data.RData")
+
+library(tidyverse)
+
+### Recode Program labels
+
+Program_recoded <- recode(y$Program,
+`1` = "Business",
+`2` = "Education",
+`3` = "Engineering",
+`4` = "Fine Arts",
+`5` = "Human & Social Dev",
+`6` = "Humanities",
+`7` = "Sciences",
+`8` = "Social Sciences"
+)
+
+### Recode Sex
+
+Sex_recoded <- recode(y$Sex,
+`1` = "Male",
+`2` = "Female",
+`3` = "Intersex"
+)
+
+### Recode International Status
+
+Intl_recoded <- recode(y$International,
+`1` = "Yes",
+`2` = "No"
+)
+
+### Build analysis dataframe
+
+survey.data <- tibble(
+SSS = rowMeans(y[, 56:67], na.rm = TRUE),
+DERS = rowSums(y[, 81:96], na.rm = TRUE),
+Program = Program_recoded,
+Sex = Sex_recoded,
+International = Intl_recoded
+)
+```
+
+### Distribution of DERS Scores Across Programs
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(survey.data, aes(x = Program, y = SSS, fill = Program)) +
+geom_boxplot() +
+labs(
+title = "Seeking Social Support Across Academic Programs",
+x = "Program of Study",
+y = "SSS Score"
+) +
+theme_minimal() +
+theme(axis.text.x = element_text(angle = 45, hjust = 1),
+legend.position = "none")
+```
+The distribution of DERS scores appears broadly similar across programs, though Education shows a slightly higher median compared to others. The overlap suggests differences may be modest, requiring statistical testing.
+
+### ANOVA Test
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+anova_program <- oneway.test(SSS ~ Program, data = survey.data, var.equal = FALSE)
+anova_program
+```
+The p-value is large, indicating no significant differences in SSS between academic programs.
+
+### SSS Differences by Sex
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(survey.data, aes(x = Sex, y = SSS, fill = Sex)) +
+geom_boxplot() +
+labs(
+title = "Seeking Social Support by Sex",
+x = "",
+y = "SSS Score"
+) +
+theme_minimal() +
+theme(legend.position = "none")
+```
+Female and male students show slightly different distributions, but the overlap is substantial.
+
+### t-Test: Female vs Male
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t.test(
+survey.data$SSS[survey.data$Sex == "Female"],
+survey.data$SSS[survey.data$Sex == "Male"],
+alternative = "two.sided"
+)
+```
+The p-value is just above 0.05. This suggests no statistically reliable difference in SSS between men and women.
+
+### SSS Differences by International Status
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(survey.data, aes(x = International, y = SSS, fill = International)) +
+geom_boxplot() +
+labs(
+title = "Seeking Social Support by International Status",
+x = "",
+y = "SSS Score"
+) +
+theme_minimal() +
+theme(legend.position = "none")
+```
+International and domestic students appear very similar in how much social support they report seeking.
+
+### Relationship Between SSS and Emotional-Regulation Difficulty (DERS)
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(survey.data, aes(x = DERS, y = SSS)) +
+geom_point(alpha = 0.3) +
+geom_smooth(method = "lm", color = "red") +
+labs(
+title = "Relationship Between DERS and SSS",
+x = "DERS Total Score",
+y = "SSS Score"
+) +
+theme_minimal()
+```
+There is a slight downward pattern: higher DERS (more emotional-regulation difficulty) is associated with lower SSS.
+
+### High vs Low DERS Groups
+We divide students into two groups based on whether their DERS score exceeds 64.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=6, fig.height=4}
+ggplot(survey.data, aes(x = DERS > 64, y = SSS, fill = DERS > 64)) +
+geom_boxplot() +
+labs(
+title = "SSS Scores for Low vs High Emotional-Regulation Difficulty",
+x = "High DERS (TRUE/FALSE)",
+y = "SSS Score"
+) +
+theme_minimal() +
+theme(legend.position = "none")
+
+```
+
+Students with very high DERS scores clearly show lower SSS values.
+
+### t-Test: Low DERS vs High DERS
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t.test(
+survey.data$SSS[survey.data$DERS <= 64],
+survey.data$SSS[survey.data$DERS > 64],
+alternative = "two.sided"
+)
+```
+The p-value is extremely small (1.8e-06).
+This indicates a highly significant difference:
+Students who struggle more with emotional regulation tend to seek less social support.
+
+### Interpretation
+Across academic programs, sex, and international status, students report similar levels of social-support seeking. The only meaningful predictor in this analysis is emotional-regulation difficulty:
+
+Students with high DERS scores consistently report lower SSS.
+
+This suggests that the tendency to seek social support is influenced more by psychological factors than by demographic or academic ones.
+
+
+\newpage
+
+
+# Research Question 3: Restfulness and Mental-Health Symptoms (DASS-21)
+
+This analysis examines whether students who report feeling well-rested differ in their mental-health symptoms, as measured by the DASS-21 (Depression, Anxiety, and Stress Scale). Each student answered 21 items scored from 0–3, and higher average scores indicate greater psychological distress. The Rested variable contains three groups: **Yes (1)**, **Somewhat (2)**, and **No (3)**.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+load("Clean_Data.RData")
+dat <- y %>% mutate(Rested = as.numeric(Rested))
+avg_dass <- dat %>%
+  group_by(Rested) %>%
+  summarise(
+    n = n(),
+    across(starts_with("DASS"), ~ mean(.x, na.rm = TRUE)),
+    .groups = "drop"
+  ) %>%
+  rowwise() %>%
+  mutate(Overall_DASS_Average = mean(c_across(starts_with("DASS")), na.rm = TRUE)) %>%
+  ungroup()
+
+n_row <- avg_dass %>%
+  select(Rested, n) %>%
+  pivot_wider(names_from = Rested, values_from = n, names_sort = TRUE) %>%
+  mutate(DASS_Variable = "n") %>%
+  select(DASS_Variable, everything())
+
+avg_dass_long <- avg_dass %>%
+  select(-n) %>%
+  pivot_longer(cols = -Rested, names_to = "DASS_Variable", values_to = "Mean") %>%
+  pivot_wider(names_from = Rested, values_from = Mean, names_sort = TRUE)
+
+final_table <- bind_rows(n_row, avg_dass_long)
+
+knitr::kable(final_table, caption = "Average DASS Scores by Rested Group")
+```
+
+Students who report being well-rested exhibit clearly lower average DASS scores, indicating fewer symptoms of depression, anxiety, and stress. Students who report not feeling rested show the highest levels of psychological distress, with the “Somewhat” group in the middle.
+
+### Distribution of DASS Scores by Rested Group
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+dat <- read_xlsx("average_DASS_transposed_with_n.xlsx")
+
+
+dat_clean <- dat %>%
+  filter(!(DASS_Variable %in% c("n", "Overall_DASS_Average")))
+
+# Convert from wide → long format
+dat_long <- dat_clean %>%
+  pivot_longer(
+    cols = c(`1`, `2`, `3`),
+    names_to = "Rested",
+    values_to = "Mean_DASS"
+  ) %>%
+  mutate(
+    Rested = recode(Rested,
+                    "1" = "Yes",
+                    "2" = "Somewhat",
+                    "3" = "No"),
+    Rested = factor(Rested, levels = c("Yes", "Somewhat", "No"))
+  )
+
+ggplot(dat_long, aes(x = Rested, y = Mean_DASS, fill = Rested)) +
+  geom_boxplot(width = 0.6, outlier.alpha = 0.3) +
+  # (Optional) add jitter points for each DASS item
+  # geom_jitter(width = 0.15, alpha = 0.6, size = 1.8) +
+  scale_fill_manual(values = c("#99ff99", "#99ccff", "#ff9999")) +
+  labs(
+    title = "Average DASS Results by Rested",
+    x = "Rested Response",
+    y = "Average DASS Value",
+    fill = "Rested"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    legend.position = "none"
+  )
+```
+The boxplot shows a clear trend:
+
+- Well-rested students: lowest median DASS, smallest variability
+
+- Somewhat rested students: moderate DASS
+
+- Not rested students: highest median and widest spread
+
+The upward shift of medians and increasing variability from left to right strongly suggests a relationship between restfulness and mental-health symptoms.
+
+
+### ANOVA Test
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+dat <- read_xlsx("average_DASS_transposed_with_n.xlsx")
+
+
+dat_clean <- dat %>%
+  filter(!(DASS_Variable %in% c("n", "Overall_DASS_Average")))
+
+dat_long <- dat_clean %>%
+  pivot_longer(
+    cols = c(`1`, `2`, `3`),
+    names_to = "Rested",
+    values_to = "Mean_DASS"
+  ) %>%
+  mutate(
+    Rested = factor(Rested,
+                    levels = c("1", "2", "3"),
+                    labels = c("Yes", "Somewhat", "No"))
+  )
+
+
+anova_model <- aov(Mean_DASS ~ Rested, data = dat_long)
+anova_summary <- summary(anova_model)
+anova_summary
+
+anova_table <- anova_summary[[1]]
+F_value <- anova_table[["F value"]][1]
+df1 <- anova_table[["Df"]][1]     # Between groups
+df2 <- anova_table[["Df"]][2]     # Within groups
+alpha <- 0.05
+
+F_critical <- qf(1 - alpha, df1, df2)
+
+cat("F =", round(F_value, 3),
+    "| F_critical =", round(F_critical, 3),
+    "| df1 =", df1, "| df2 =", df2, "\n")
+
+if (F_value > F_critical) {
+  cat("Decision: Reject Ho  There are significant differences among the Rested groups.\n")
+} else {
+  cat("Decision: Fail to reject Ho — No significant differences among the Rested groups.\n")
+}
+```
+The ANOVA produces a highly significant F-statistic, well above the critical value.
+This indicates that mean DASS scores differ significantly among the three restfulness groups.
+
+
+### Interpretation
+
+The statistical and visual evidence clearly indicate that restfulness is strongly associated with mental-health symptoms. Students who report being well-rested show substantially lower average DASS scores than those who report being “Somewhat” or “Not” rested. The ANOVA confirms that these differences are statistically meaningful.
+
+In short, better sleep is linked with reduced symptoms of depression, anxiety, and stress among university students. Although this does not establish causation, the pattern is consistent and robust across the analysis.
+
+
+\newpage
+
+
+# Research Question 4: Pre- vs Post-COVID Perceived Stress (PSS)
+
+This analysis investigates whether students’ perceived stress levels changed significantly from **before** to **after** the COVID-19 outbreak. The Perceived Stress Scale (PSS) contains 10 items scored from 0–4, and higher totals indicate greater stress. Since the same students completed both the pre- and post-COVID versions, a **paired t-test** is appropriate to detect changes in stress levels.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Load data
+Data <- read.csv("student_mental_health.csv")[1:1193, ]
+
+# Select PSS variables
+pss_vars_pre  <- paste0("Pre_PSS_", 1:10)
+pss_vars_post <- paste0("Post_PSS_", 1:10)
+
+pss_data <- Data %>%
+  select(all_of(c(pss_vars_pre, pss_vars_post)))
+
+# Reverse-code items 4, 5, 7, 8 (PSS uses 0–4 scale)
+reverse_items <- c(4, 5, 7, 8)
+
+for (i in reverse_items) {
+  pss_data[[paste0("Pre_PSS_",  i)]] <- 4 - pss_data[[paste0("Pre_PSS_",  i)]]
+  pss_data[[paste0("Post_PSS_", i)]] <- 4 - pss_data[[paste0("Post_PSS_", i)]]
+}
+
+# Compute total scores
+pss_data <- pss_data %>%
+  mutate(
+    pre_total  = rowSums(across(all_of(pss_vars_pre)),  na.rm = TRUE),
+    post_total = rowSums(across(all_of(pss_vars_post)), na.rm = TRUE)
+  )
+
+summary_stats <- describe(pss_data[, c("pre_total", "post_total")]) %>%
+select(vars, n, mean, sd, median, min, max, range) %>%
+mutate(across(where(is.numeric), ~ round(., 3)))
+
+kable(summary_stats,
+caption = "Descriptive Statistics for Pre- and Post-COVID PSS Total Scores",
+align = "c")
+```
+Students’ post-COVID stress scores show a higher mean and increased variability compared to pre-COVID scores, suggesting upward pressure on stress levels after the onset of the pandemic.
+
+### Boxplot Comparison
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+pss_data %>%
+pivot_longer(cols = c(pre_total, post_total),
+names_to = "Period",
+values_to = "Score") %>%
+mutate(Period = factor(Period, levels = c("pre_total", "post_total"),
+labels = c("Pre-COVID", "Post-COVID"))) %>%
+ggplot(aes(x = Period, y = Score, fill = Period)) +
+geom_boxplot() +
+labs(
+title = "Perceived Stress Scores Before vs After COVID-19",
+y = "Total PSS Score",
+x = ""
+) +
+theme_minimal() +
+theme(plot.title = element_text(hjust = 0.5))
+```
+The boxplots show a clear upward shift in the distribution after COVID-19: higher median, higher upper quartile, and more extreme values.
+
+
+### Normality Check (QQ Plots)
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+par(mfrow = c(1, 2))
+
+qqnorm(pss_data$pre_total, main = "QQ Plot — Pre-COVID PSS")
+qqline(pss_data$pre_total, col = "red")
+
+qqnorm(pss_data$post_total, main = "QQ Plot — Post-COVID PSS")
+qqline(pss_data$post_total, col = "red")
+
+par(mfrow = c(1, 1))
+```
+Both plots show mild deviations but are acceptable given the large sample size (n = 1193), making the paired t-test robust.
+
+### Paired t-Test
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t_test_result <- t.test(pss_data$pre_total, pss_data$post_total, paired = TRUE)
+t_test_result
+```
+
+### Effect Size (Cohen's d)
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+effectsize_result <- cohens_d(pss_data$post_total, pss_data$pre_total, paired = TRUE)
+effectsize_result
+```
+Cohen’s d is approximately 0.44, a medium effect size, meaning the increase in stress is not only statistically significant but also meaningful.
+
+### Interpretation
+Students reported significantly higher perceived stress after the COVID-19 outbreak.
+The paired t-test shows a large test statistic with p < 0.001, and the effect size indicates a moderate increase in stress, consistent across participants.
+
+The boxplot and descriptive statistics reinforce this result: post-COVID stress scores are shifted upward with greater variability.
+
+Taken together, the evidence strongly supports that students experienced increased psychological stress following the onset of COVID-19, both statistically and practically significant.
+
+
+\newpage
+
+
+# Research Question 5: Hobbies and Emotional Regulation (DERS)
+
+This analysis investigates whether students’ hobbies—both the amount of time spent on them and the importance assigned to them—are associated with difficulties in emotional regulation, as measured by the DERS-16 scale. We screened all eight hobby-importance items, eight hobby-time items, and two overall summary scores to identify which variables showed meaningful relationships with emotional-regulation difficulties. The goal was to determine whether certain leisure patterns are linked to students’ self-reported ability to manage emotions.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+Data <- read.csv("student_mental_health.csv")[1:1193, ]
+
+ders_items <- paste0("DERS_", 1:16)
+imp_items <- paste0("Hobbies_Imp_", 1:8)
+time_items <- paste0("Hobbies_Time_", 1:8)
+
+Data_filtered <- Data %>%
+filter(Catch_question != "NA") %>%
+mutate(
+DERS_mean = rowMeans(select(., all_of(ders_items)), na.rm = TRUE),
+Imp_overall = rowMeans(select(., all_of(imp_items)), na.rm = TRUE),
+Time_overall = rowMeans(select(., all_of(time_items)), na.rm = TRUE)
+)
+
+Data_analysis <- Data_filtered %>% filter(!is.na(DERS_mean))
+
+```
+
+### Screening All Hobby Variables
+We began by examining the distribution and variability of all hobby-related variables.
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+all_hobby_vars <- c(imp_items, time_items, "Imp_overall", "Time_overall")
+
+hobby_table <- tibble(
+Variable = all_hobby_vars,
+Mean = sapply(Data_analysis[all_hobby_vars], mean, na.rm = TRUE),
+SD = sapply(Data_analysis[all_hobby_vars], sd, na.rm = TRUE),
+n = sapply(Data_analysis[all_hobby_vars], function(x) sum(!is.na(x)))
+)
+
+kable(hobby_table, digits = 3,
+caption = "Means and Standard Deviations for All Hobby Variables")
+```
+
+Next, correlations were computed between each hobby variable and DERS_mean. This screening step identifies which items have the strongest associations.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+screen_results <- tibble(
+Variable = all_hobby_vars,
+r = NA_real_,
+p_value = NA_real_,
+n = NA_integer_
+)
+
+for (i in seq_along(all_hobby_vars)) {
+v <- all_hobby_vars[i]
+tmp <- Data_analysis[, c("DERS_mean", v)]
+tmp <- tmp[complete.cases(tmp), ]
+test <- cor.test(tmp$DERS_mean, tmp[[v]])
+
+screen_results$r[i] <- unname(test$estimate)
+screen_results$p_value[i] <- test$p.value
+screen_results$n[i] <- nrow(tmp)
+}
+
+screen_results <- screen_results %>%
+mutate(abs_r = abs(r)) %>%
+arrange(desc(abs_r))
+
+kable(screen_results,
+digits = 3,
+caption = "Correlations Between DERS_mean and All Hobby Variables (Screening Table)")
+```
+
+Variables considered "noteworthy" met both criteria:
+
+* |r| ≥ 0.10
+* p < 0.05
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+screen_focus <- screen_results %>%
+filter(!is.na(r),
+abs_r >= 0.10,
+p_value < 0.05)
+
+kable(screen_focus,
+digits = 3,
+caption = "Hobby Variables With Significant Correlation With DERS_mean")
+```
+Two items clearly stood out:
+
+* Hobbies_Time_1: Hours spent on athletics / varsity / intramurals
+* Hobbies_Imp_4: Importance of watching online recreational content (Netflix, YouTube)
+
+
+### Correlation Tests
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+cor_time1 <- cor.test(~ DERS_mean + Hobbies_Time_1, data = Data_analysis)
+cor_imp4  <- cor.test(~ DERS_mean + Hobbies_Imp_4, data = Data_analysis)
+
+cor_time1
+cor_imp4
+```
+* Hobbies_Time_1: small negative correlation
+* Hobbies_Imp_4: small positive correlation
+
+
+### Linear Models
+Both linear models below confirm that, although the effect size was small, they are statistically detectable due to the large sample size.
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+lm_time1 <- lm(DERS_mean ~ Hobbies_Time_1, data = Data_analysis)
+lm_imp4 <- lm(DERS_mean ~ Hobbies_Imp_4, data = Data_analysis)
+
+summary(lm_time1)
+anova(lm_time1)
+
+summary(lm_imp4)
+anova(lm_imp4)
+```
+
+
+### Visualizations
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+plot(DERS_mean ~ Hobbies_Time_1,
+data = Data_analysis,
+xlab = "Hours Spent on Athletics (Hobbies_Time_1)",
+ylab = "DERS Mean",
+main = "DERS_mean vs Hobbies_Time_1")
+
+abline(lm_time1, col = "red", lwd = 2)
+
+plot(DERS_mean ~ Hobbies_Imp_4,
+data = Data_analysis,
+xlab = "Importance of Recreational Streaming (Hobbies_Imp_4)",
+ylab = "DERS Mean",
+main = "DERS_mean vs Hobbies_Imp_4")
+
+abline(lm_imp4, col = "red", lwd = 2)
+
+```
+
+### Interpretation
+The screening process showed that most hobby variables had very weak or negligible relationships with emotional-regulation difficulties. However, two stood out with small yet statistically significant associations:
+
+1. Hours spent in athletic activities (Hobbies_Time_1)
+
+Exhibits a negative relationship with DERS_mean.
+
+Students who spend more time in athletic or varsity activities tend to report fewer difficulties regulating emotions.
+
+This aligns with research showing that physical activity supports mood regulation and stress recovery.
+
+2. Importance of recreational online content (Hobbies_Imp_4)
+
+Shows a positive association with DERS_mean.
+
+Students who rate online streaming (YouTube/Netflix) as more important tend to score slightly higher on emotional-regulation difficulties.
+
+While correlational, this could indicate coping through passive digital consumption rather than active stress-management strategies.
+
+Overall, hobby-related variables show subtle but meaningful links with emotional regulation, suggesting that leisure choices—especially physical activity and media-consumption habits—may play a modest role in students’ emotional well-being.
+
+
+\newpage
+
+
+# Conclusion and Future Direction
+
+Across all four research questions, the results point to a consistent pattern: external factors such as program, sex, or international status did not strongly relate to mental-health outcomes, while internal factors—restfulness and emotional-regulation ability—showed clearer associations.
+
+Students in different programs showed only small differences in emotion-regulation (DERS) scores. Seeking social support (SSS) also did not vary meaningfully by program, sex, or international status. However, students with higher emotional-regulation difficulties tended to seek less social support, suggesting that personal emotional functioning plays a bigger role than demographic characteristics. Feeling well-rested showed a clear relationship with mental health: students who slept well reported noticeably lower depression, anxiety, and stress (DASS-21). Lastly, perceived stress (PSS) increased significantly after COVID-19, with a medium effect size, indicating a real and meaningful shift in student stress levels.
+
+These findings should be viewed with some caution. The data are self-reported, which can introduce bias, and the sample is not randomly selected, since students participated voluntarily online. The dataset is also cross-sectional, meaning we cannot establish cause and effect. Scale scoring was followed according to provided guidelines, but subjective interpretation of questions may still vary across respondents.
+
+Future studies could use a longitudinal design to track students over time or include additional variables such as sleep duration, academic workload, or social connectedness. More representative sampling across institutions would also strengthen generalizability. Finally, combining quantitative responses with qualitative insights could help explain why students differ in stress, restfulness, or support-seeking behaviors.
+
+Overall, the analysis suggests that personal well-being factors—especially sleep and emotional regulation—play a larger role in student mental health than demographic differences, and these areas may be the most valuable targets for future support initiatives.
+
+
+\newpage
+
+
+# Appendix
+
+## Research Question 1
+
+### Install and Load Libraries
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+install.packages(c("survey"))
+```
+### Import Data
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+Data <- read.csv("student_mental_health.csv")[1:1193, ]
+attach(Data)
+```
+
+```{r, results='asis', eval=(opts_knit$get('rmarkdown.pandoc.to') == 'latex'), echo = FALSE}
+cat('\\pagebreak')
+```
+
+### Filter Data
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+
+# Remove observations where participants failed the catch question
+passed_catch = filter(Data, Data$Catch_question != "NA")
+
+# Isolate the appropriate columns
+this_subset <- passed_catch[, c("Program", "DERS_1", "DERS_2", "DERS_3", "DERS_4", 
+                                   "DERS_5", "DERS_6", "DERS_7", "DERS_8", 
+                                   "DERS_9", "DERS_10", "DERS_11", "DERS_12", 
+                                   "DERS_13", "DERS_14", "DERS_15","DERS_16")]
+                                   
+# Add new column to data
+this_subset['DERS_mean'] <- 0
+
+for (i in 1:length(this_subset$Program)){
+  # Populate the new columns with the mean of DERS responses from each row
+  this_subset$DERS_mean[i] = rowMeans(this_subset[i, c(2:17)])
+  
+}
+
+```
+
+
+### Boxplots of the Mean Response to DERS Questions Per Program
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+
+this_subset$Program <- as.factor(this_subset$Program)
+
+ggplot(this_subset, 
+       aes(x=this_subset$Program, 
+           y=this_subset$DERS_mean, 
+           fill=this_subset$Program)) +
+
+# Label the scale
+scale_fill_discrete('Programs', 
+                    labels=c('Business', 'Education', 'Engineering', 
+                    'Fine Arts', 'Human & Social Development', 
+                    'Humanities', 'Sciences', 
+                    'Social Sciences')) +
+
+geom_boxplot() +
+
+labs(title = "Distribution of Average Response Per Program",
+           x = "Programs of Study",
+           y = "Response") +
+
+theme_minimal()+ 
+
+theme(plot.title = element_text(hjust = 0.5), # center the title
+      axis.text.x = element_blank())
+
+```
+
+### AoV and F Test
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+
+results <- aov(this_subset$DERS_mean ~ this_subset$Program, data = this_subset)
+
+aov_summary <- summary(results)
+
+aov_table <- aov_summary[[1]]
+
+# F Test
+f_value <- aov_table[["F value"]][1]
+
+df_1 <- aov_table[["Df"]][1] # degrees of freedom
+df_2 <- aov_table[["Df"]][2] # degrees of freedom
+
+f_crit <- qf(0.95, df_1, df_2)
+
+if (f_value > f_crit) {
+  print("Reject the null hypothesis.")
+  
+} else {
+  print("Fail to reject the null hypothesis.")
+  
+}
+
+```
+
+### Condifence Intervals
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+
+Program <- 1:8
+Mean <- 0
+Lower_Bound <- 0
+Upper_Bound <- 0
+
+ci_summary = data.frame(Program, Mean, Lower_Bound, Upper_Bound)
+
+
+for (i in 1:8){
+  this_data <- subset(this_subset$DERS_mean, this_subset$Program == i)
+  
+  t_result <- t.test(this_data)
+  
+  this_ci <- t_result$conf.int
+  
+  ci_summary$Mean[i] = t_result$estimate
+  ci_summary$Lower_Bound[i] = this_ci[1]
+  ci_summary$Upper_Bound[i] = this_ci[2]
+}
+
+
+means <- ci_summary$Mean
+lower <- ci_summary$Lower_Bound
+upper <- ci_summary$Upper_Bound
+
+labels <- c('Business', 'Education', 'Engineering', 
+                    'Fine Arts', 'Human & Social Development', 
+                    'Humanities', 'Sciences', 
+                    'Social Sciences')
+
+ggplot(ci_summary, aes(labels, means)) +
+# Label the scale
+scale_fill_discrete('Programs', 
+                    labels=c('Business', 'Education', 'Engineering', 
+                    'Fine Arts', 'Human & Social Development', 
+                    'Humanities', 'Sciences', 
+                    'Social Sciences')) +
+
+geom_point() +
+geom_errorbar(aes(ymin = lower, ymax = upper)) + 
+labs(title = "Confidence Interval of Mean of DERS Responses",
+       x = "Programs",
+       y = "Average Response to DERS") +
+
+theme_minimal()+ 
+theme(plot.title = element_text(hjust = 0.5)) + # center the title
+coord_flip() +
+scale_y_continuous(limits = c(2, 4), breaks = seq(2, 4, by = 0.25))
+
+```
+
+
+## Research Question 2
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+load("Clean_Data.RData")
+library(splines)
+set.seed(888)
+y.Program = y[,"Program"]
+y.Program[y.Program == 1] <- "Busn"
+y.Program[y.Program == 2] <- "Edu"
+y.Program[y.Program == 3] <- "Engin"
+y.Program[y.Program == 4] <- "Arts"
+y.Program[y.Program == 5] <- "Hum,soc dev"
+y.Program[y.Program == 6] <- "Hum"
+y.Program[y.Program == 7] <- "Sc"
+y.Program[y.Program == 8] <- "Soc sc"
+y.Sex = y[,"Sex"]
+y.Sex[y.Sex==1] <- "Male"
+y.Sex[y.Sex==2] <- "Female"
+y.Sex[y.Sex==3] <- "Intersex"
+y.International = y[,"International"]
+y.International[y.International==1] <- "Yes"
+y.International[y.International==2] <- "No"
+survey.data = data.frame(DERS=rowSums(y[,81:96]),SSS=rowMeans(y[,56:67]), Program=y.Program,Sex=y.Sex,International=y.International)
+```
+
+```{r}
+boxplot(SSS~Program,data=survey.data,cex.axis=0.75)
+
+```
+
+```{r}
+oneway.test(SSS~Program,data=survey.data, var.equal = FALSE)
+```
+
+```{r}
+boxplot(SSS~Sex,data=survey.data)
+```
+
+```{r}
+t.test(survey.data[survey.data$Sex=="Female","SSS"],survey.data[survey.data$Sex=="Male","SSS"], "two.sided", 0)
+```
+
+```{r}
+boxplot(SSS~International,data=survey.data)
+```
+
+```{r}
+boxplot(SSS~DERS, data=survey.data)
+```
+
+```{r}
+boxplot(SSS~DERS>64, data=survey.data)
+```
+
+```{r}
+t.test(survey.data[survey.data$DERS<=64,"SSS"],survey.data[survey.data$DERS>64,"SSS"], "two.sided", 0)
+```
+
+
+## Research Question 3
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+library(dplyr)
+library(tidyr)
+library(readxl)
+library(writexl)
+library(ggplot2)
+library(knitr)
+```
+
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+load("Clean_Data.RData")
+dat <- y %>% mutate(Rested = as.numeric(Rested))
+avg_dass <- dat %>%
+  group_by(Rested) %>%
+  summarise(
+    n = n(),
+    across(starts_with("DASS"), ~ mean(.x, na.rm = TRUE)),
+    .groups = "drop"
+  ) %>%
+  rowwise() %>%
+  mutate(Overall_DASS_Average = mean(c_across(starts_with("DASS")), na.rm = TRUE)) %>%
+  ungroup()
+
+n_row <- avg_dass %>%
+  select(Rested, n) %>%
+  pivot_wider(names_from = Rested, values_from = n, names_sort = TRUE) %>%
+  mutate(DASS_Variable = "n") %>%
+  select(DASS_Variable, everything())
+
+avg_dass_long <- avg_dass %>%
+  select(-n) %>%
+  pivot_longer(cols = -Rested, names_to = "DASS_Variable", values_to = "Mean") %>%
+  pivot_wider(names_from = Rested, values_from = Mean, names_sort = TRUE)
+
+final_table <- bind_rows(n_row, avg_dass_long)
+
+knitr::kable(final_table, caption = "Average DASS Scores by Rested Group")
+
+```
+
+```{r, include=TRUE, message=FALSE, warning=FALSE}
+dat <- read_xlsx("average_DASS_transposed_with_n.xlsx")
+
+
+dat_clean <- dat %>%
+  filter(!(DASS_Variable %in% c("n", "Overall_DASS_Average")))
+
+# Convert from wide → long format
+dat_long <- dat_clean %>%
+  pivot_longer(
+    cols = c(`1`, `2`, `3`),
+    names_to = "Rested",
+    values_to = "Mean_DASS"
+  ) %>%
+  mutate(
+    Rested = recode(Rested,
+                    "1" = "Yes",
+                    "2" = "Somewhat",
+                    "3" = "No"),
+    Rested = factor(Rested, levels = c("Yes", "Somewhat", "No"))
+  )
+
+ggplot(dat_long, aes(x = Rested, y = Mean_DASS, fill = Rested)) +
+  geom_boxplot(width = 0.6, outlier.alpha = 0.3) +
+  # (Optional) add jitter points for each DASS item
+  # geom_jitter(width = 0.15, alpha = 0.6, size = 1.8) +
+  scale_fill_manual(values = c("#99ff99", "#99ccff", "#ff9999")) +
+  labs(
+    title = "Average DASS Results by Rested",
+    x = "Rested Response",
+    y = "Average DASS Value",
+    fill = "Rested"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    legend.position = "none"
+  )
+```
+
+```{r, include=TRUE, message=FALSE, warning=FALSE}
+
+dat <- read_xlsx("average_DASS_transposed_with_n.xlsx")
+
+
+dat_clean <- dat %>%
+  filter(!(DASS_Variable %in% c("n", "Overall_DASS_Average")))
+
+dat_long <- dat_clean %>%
+  pivot_longer(
+    cols = c(`1`, `2`, `3`),
+    names_to = "Rested",
+    values_to = "Mean_DASS"
+  ) %>%
+  mutate(
+    Rested = factor(Rested,
+                    levels = c("1", "2", "3"),
+                    labels = c("Yes", "Somewhat", "No"))
+  )
+
+
+anova_model <- aov(Mean_DASS ~ Rested, data = dat_long)
+anova_summary <- summary(anova_model)
+anova_summary
+
+anova_table <- anova_summary[[1]]
+F_value <- anova_table[["F value"]][1]
+df1 <- anova_table[["Df"]][1]     # Between groups
+df2 <- anova_table[["Df"]][2]     # Within groups
+alpha <- 0.05
+
+F_critical <- qf(1 - alpha, df1, df2)
+
+cat("F =", round(F_value, 3),
+    "| F_critical =", round(F_critical, 3),
+    "| df1 =", df1, "| df2 =", df2, "\n")
+
+if (F_value > F_critical) {
+  cat("Decision: Reject Ho  There are significant differences among the Rested groups.\n")
+} else {
+  cat("Decision: Fail to reject Ho — No significant differences among the Rested groups.\n")
+}
+```
+
+
+## Research Question 4
+
+### Install Sampling and Survey Package 
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+install.packages(c("tidyverse", "psych", "effectsize", "knitr"))
+```
+### Load the Required Libraries
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(psych)
+library(effectsize)
+library(knitr)
+```
+### Import the Data File into R
+```{r import data, include = TRUE, message = FALSE, warning = FALSE}
+
+# Read/Import the data file in R
+student_mental_health <- read.csv("student_mental_health.csv")[1:1193, ]
+attach(student_mental_health)
+```
+### Select & Prepare PSS Variables
+```{r variable selection, include = TRUE, message = FALSE, warning = FALSE}
+# Select only the relevant columns
+pss_vars_pre  <- paste0('Pre_PSS_', 1:10)
+pss_vars_post <- paste0('Post_PSS_', 1:10)
+
+pss_data <- student_mental_health %>%
+  select(all_of(c(pss_vars_pre, pss_vars_post)))
+```
+### Reverse-Code Items 4, 5, 7, 8
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+reverse_items <- c(4, 5, 7, 8)
+
+for (i in reverse_items) {
+    pss_data[[paste0('Pre_PSS_', i)]] <- 4 - pss_data[[paste0('Pre_PSS_', i)]]
+    pss_data[[paste0('Post_PSS_', i)]] <- 4 - pss_data[[paste0('Post_PSS_', i)]]
+}
+```
+### Compute Total Scores
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+pss_data <- pss_data %>%
+mutate(
+    pre_total = rowSums(select(., all_of(pss_vars_pre)), na.rm = TRUE),
+    post_total = rowSums(select(., all_of(pss_vars_post)), na.rm = TRUE)
+)
+```
+### Descriptive Statistics
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+describe(pss_data[, c('pre_total', 'post_total')])
+```
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+# Boxplot comparison (pre shown on the left)
+pss_data %>%
+  pivot_longer(cols = c(pre_total, post_total),
+               names_to = 'Period', values_to = 'Score') %>%
+  mutate(Period = factor(Period, levels = c('pre_total', 'post_total'))) %>%  # enforce order
+  ggplot(aes(x = Period, y = Score, fill = Period)) +
+  geom_boxplot() +
+  labs(
+    title = 'Perceived Stress Levels Before vs After COVID-19',
+    y = 'PSS Total Score',
+    x = ''
+  ) +
+  theme_minimal()
+
+# QQ plots for normality check
+par(mfrow = c(1, 2))  # two plots side by side
+
+qqnorm(pss_data$pre_total, main = 'QQ Plot - Pre-COVID PSS')
+qqline(pss_data$pre_total, col = 'red')
+
+qqnorm(pss_data$post_total, main = 'QQ Plot - Post-COVID PSS')
+qqline(pss_data$post_total, col = 'red')
+
+par(mfrow = c(1, 1))  # reset layout
+```
+### Paired t-Test
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+t_test_result <- t.test(pss_data$pre_total, pss_data$post_total, paired = TRUE)
+t_test_result
+```
+### Effect Size
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+cohens_d(pss_data$post_total, pss_data$pre_total, paired = TRUE)
+```
+### Result
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+# Compute descriptive statistics
+desc_stats <- describe(pss_data[, c('pre_total', 'post_total')])
+# Round all numeric columns to 4 decimals
+desc_summary <- desc_stats %>%
+  select(vars, n, mean, sd, median, min, max, range, skew, kurtosis) %>%
+  mutate(across(where(is.numeric), ~ round(., 4)))
+
+# Display formatted table
+kable(desc_summary,
+      caption = "Descriptive Statistics for Pre- and Post-COVID Perceived Stress Scores",
+      align = 'c')
+```
+
+
+## Research Question 5
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+Data <- read.csv("student_mental_health.csv")[1:1193, ]
+
+ders_items <- paste0("DERS_", 1:16)
+imp_items <- paste0("Hobbies_Imp_", 1:8)
+time_items <- paste0("Hobbies_Time_", 1:8)
+
+Data_filtered <- Data %>%
+filter(Catch_question != "NA") %>%
+mutate(
+DERS_mean = rowMeans(select(., all_of(ders_items)), na.rm = TRUE),
+Imp_overall = rowMeans(select(., all_of(imp_items)), na.rm = TRUE),
+Time_overall = rowMeans(select(., all_of(time_items)), na.rm = TRUE)
+)
+
+Data_analysis <- Data_filtered %>% filter(!is.na(DERS_mean))
+```
+
+### Screening All Hobby Variables
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+all_hobby_vars <- c(imp_items, time_items, "Imp_overall", "Time_overall")
+
+hobby_table <- tibble(
+Variable = all_hobby_vars,
+Mean = sapply(Data_analysis[all_hobby_vars], mean, na.rm = TRUE),
+SD = sapply(Data_analysis[all_hobby_vars], sd, na.rm = TRUE),
+n = sapply(Data_analysis[all_hobby_vars], function(x) sum(!is.na(x)))
+)
+
+kable(hobby_table, digits = 3,
+caption = "Means and Standard Deviations for All Hobby Variables")
+```
+
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+screen_results <- tibble(
+Variable = all_hobby_vars,
+r = NA_real_,
+p_value = NA_real_,
+n = NA_integer_
+)
+
+for (i in seq_along(all_hobby_vars)) {
+v <- all_hobby_vars[i]
+tmp <- Data_analysis[, c("DERS_mean", v)]
+tmp <- tmp[complete.cases(tmp), ]
+test <- cor.test(tmp$DERS_mean, tmp[[v]])
+
+screen_results$r[i] <- unname(test$estimate)
+screen_results$p_value[i] <- test$p.value
+screen_results$n[i] <- nrow(tmp)
+}
+
+screen_results <- screen_results %>%
+mutate(abs_r = abs(r)) %>%
+arrange(desc(abs_r))
+
+kable(screen_results,
+digits = 3,
+caption = "Correlations Between DERS_mean and All Hobby Variables (Screening Table)")
+
+screen_focus <- screen_results %>%
+filter(!is.na(r),
+abs_r >= 0.10,
+p_value < 0.05)
+
+kable(screen_focus,
+digits = 3,
+caption = "Hobby Variables With Significant Correlation With DERS_mean")
+```
+
+### Correlation Tests
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+cor_time1 <- cor.test(~ DERS_mean + Hobbies_Time_1, data = Data_analysis)
+cor_imp4  <- cor.test(~ DERS_mean + Hobbies_Imp_4, data = Data_analysis)
+
+cor_time1
+cor_imp4
+```
+
+
+### Linear Models
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+lm_time1 <- lm(DERS_mean ~ Hobbies_Time_1, data = Data_analysis)
+lm_imp4 <- lm(DERS_mean ~ Hobbies_Imp_4, data = Data_analysis)
+
+summary(lm_time1)
+anova(lm_time1)
+
+summary(lm_imp4)
+anova(lm_imp4)
+```
+
+### Visualizations
+```{r, include = TRUE, message = FALSE, warning = FALSE}
+plot(DERS_mean ~ Hobbies_Time_1,
+data = Data_analysis,
+xlab = "Hours Spent on Athletics (Hobbies_Time_1)",
+ylab = "DERS Mean",
+main = "DERS_mean vs Hobbies_Time_1")
+
+abline(lm_time1, col = "red", lwd = 2)
+
+plot(DERS_mean ~ Hobbies_Imp_4,
+data = Data_analysis,
+xlab = "Importance of Recreational Streaming (Hobbies_Imp_4)",
+ylab = "DERS Mean",
+main = "DERS_mean vs Hobbies_Imp_4")
+
+abline(lm_imp4, col = "red", lwd = 2)
+
+```

@@ -1,0 +1,191 @@
+---
+title: 'Hobbies and Emotional Regulation (DERS)'
+author: "Krzysztof Oleksiak"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+# Introduction
+Research Question: Is there a correlation between the Hobbies and the responses to 
+the Difficulties in Emotional Regulation Scale (DERS) Questionnaire?
+
+Data:
+
+- Hobbies importance  
+  Hobbies_Imp_1 to Hobbies_Imp_8, also together as Imp_overall
+  
+  (Likert: 1 = Not at all important, ..., 5 = Extremely important)
+
+- Hobbies time  
+  Hobbies_Time_1 to Hobbies_Time_8, also together as Time_overall
+  
+  (Likert: 1 = < 1 hour/week, ..., 7 = more than 20 hours/week)
+
+- Mental health metric 
+  DERS_1 to DERS_16, summarized as DERS_mean.
+  
+  ("indicate how often difficulties in emotional regulation": Almost never (0-10%) (1), ..., Almost always (91-100%) (5))
+  
+To answer the research question it is needed to:
+
+- Compare all 16 hobby items individually along with Imp_overall and Time_overall, to the DERS
+- Then summary, anova, and graph the most significant items (these are Hobbies_Time_1 and Hobbies_Imp_4).
+
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries}
+library(tidyverse)
+library(mosaic)
+library(knitr)
+```
+
+# Data Preparation
+
+```{r import}
+Data <- read.csv("Data/student_mental_health.csv")[1:1193, ]
+
+ders_items <- paste0("DERS_", 1:16)
+imp_items  <- paste0("Hobbies_Imp_", 1:8)
+time_items <- paste0("Hobbies_Time_", 1:8)
+
+Data_filtered <- Data %>% 
+  filter(Catch_question != "NA") %>%
+  mutate(
+    DERS_mean = rowMeans(select(., all_of(ders_items)), na.rm = TRUE),
+    Imp_overall  = rowMeans(select(., all_of(imp_items)),  na.rm = TRUE),
+    Time_overall = rowMeans(select(., all_of(time_items)), na.rm = TRUE)
+  )
+
+Data_analysis <- Data_filtered %>% filter(!is.na(DERS_mean))
+
+dim(Data_analysis)
+```
+
+# Table of Hobby Means
+
+```{r big_table}
+all_hobby_vars <- c(imp_items, time_items, "Imp_overall", "Time_overall")
+
+hobby_table <- tibble(
+  Variable = all_hobby_vars,
+  Mean     = sapply(Data_analysis[all_hobby_vars], mean, na.rm = TRUE),
+  SD       = sapply(Data_analysis[all_hobby_vars], sd,  na.rm = TRUE),
+  n        = sapply(Data_analysis[all_hobby_vars], function(x) sum(!is.na(x)))
+)
+
+kable(hobby_table, digits = 3,
+      caption = "Means and Standard Deviations for All Hobby Variables")
+```
+# Variables Relation to DERS_mean
+
+What is important is which hobby variables are most related to DERS_mean.  
+Computing a correlation between DERS_mean and each hobby variable, then look for variables with a correlation with statistically significant p-values.
+
+```{r screen_correlations}
+screen_results <- tibble(
+  Variable = all_hobby_vars,
+  r        = NA_real_,
+  p_value  = NA_real_,
+  n        = NA_integer_
+)
+
+for (i in seq_along(all_hobby_vars)) {
+  v   <- all_hobby_vars[i]
+  tmp <- Data_analysis[, c("DERS_mean", v)]
+  tmp <- tmp[complete.cases(tmp), ]
+  test <- cor.test(tmp$DERS_mean, tmp[[v]])
+
+  screen_results$r[i]       <- unname(test$estimate)
+  screen_results$p_value[i] <- test$p.value
+  screen_results$n[i]       <- nrow(tmp)
+}
+
+screen_results <- screen_results %>%
+  mutate(abs_r = abs(r)) %>%
+  arrange(desc(abs_r))
+
+kable(screen_results,
+      digits  = 3,
+      caption = "Correlations Between DERS_mean and All Hobby Variables (Screening Table)")
+```
+
+To decide what to focus on, variables with a correlation (abs_r >= 0.10) and p_value < 0.05 are designated significant:
+
+```{r screen_focus}
+screen_focus <- screen_results %>%
+  filter(!is.na(r),
+         abs_r >= 0.10,
+         p_value < 0.05)
+
+kable(screen_focus,
+      digits  = 3,
+      caption = "Hobby Variables With A Correlation (abs_r >= 0.10) With DERS_mean")
+```
+
+# Correlations and Linear Models
+
+- Hobbies_Time_1 - "How many hours per week do you spend participating in athletics, such as varsity sports or intramurals?"
+- Hobbies_Imp_4 - "How important is watching online recreational content such as on Netflix or Youtube to you?"
+
+## Correlation Tests
+
+```{r cor_tests}
+cor_time1 <- cor.test(~ DERS_mean + Hobbies_Time_1, data = Data_analysis)
+cor_imp4  <- cor.test(~ DERS_mean + Hobbies_Imp_4, data = Data_analysis)
+
+cor_time1
+cor_imp4
+```
+
+## Simple Linear Models
+
+```{r lm_models}
+lm_time1 <- lm(DERS_mean ~ Hobbies_Time_1, data = Data_analysis)
+lm_imp4  <- lm(DERS_mean ~ Hobbies_Imp_4, data = Data_analysis)
+
+summary(lm_time1)
+anova(lm_time1)
+
+summary(lm_imp4)
+anova(lm_imp4)
+```
+
+# Graphs
+
+## DERS_mean vs Hobbies_Time_1
+
+```{r plot_time1, fig.width=6, fig.height=5}
+plot(DERS_mean ~ Hobbies_Time_1,
+     data = Data_analysis,
+     xlab = "Hobbies_Time_1",
+     ylab = "DERS_mean",
+     main = "DERS_mean vs Hobbies_Time_1")
+
+abline(lm_time1, col = "red", lwd = 2)
+```
+
+## DERS_mean vs Hobbies_Imp_4
+
+```{r plot_imp4, fig.width=6, fig.height=5}
+plot(DERS_mean ~ Hobbies_Imp_4,
+     data = Data_analysis,
+     xlab = "Hobbies_Imp_4",
+     ylab = "DERS_mean",
+     main = "DERS_mean vs Hobbies_Imp_4")
+
+abline(lm_imp4, col = "red", lwd = 2)
+```
+
+# Conclusion
+
+From comparing all 16 hobby items individually along with Imp_overall and Time_overall to the DERS, two variables stood out as having small but statistically significant relationships to Difficulties in Emotional Regulation Scale (DERS). These are:
+
+Time spent on Hobbies_Time_1, which asked “How many hours per week do you spend participating in athletics, such as varsity sports or intramurals?”, showed a slight negative association with DERS. This suggests that students who spend more time in athletic activities tend to less often have difficulties in emotional regulation.
+
+In contrast, the perceived importance of Hobbies_Imp_4, which asked “How important is watching online recreational content such as on Netflix or YouTube to you?”, showed a small positive association. This suggests that students who view watching online recreational content as more important tend to more often have difficulties in emotional regulation.
+
+While these correlations are not large, they suggest that both the amount of time invested in certain hobbies and the personal value assigned to them contribute to mental well-being.

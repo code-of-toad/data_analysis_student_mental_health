@@ -1,0 +1,149 @@
+---
+title: "Project 304"
+author: "Jeffrey Yan"
+date: "2025-11-09"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+library(dplyr)
+library(tidyr)
+library(readxl)
+library(writexl)
+library(ggplot2)
+library(knitr)
+```
+
+
+The purpose of this analysis is to examine if there a relation between self-reported levels of rest and the associated average DASS(Depression,Anxiety and stress Scale) scores.The participants were categorized in 3 groups Yes,Somewhat, and No, answered with value  (1,2 and 3). Each participant had corresponding DASS scores representing their overall emotional distress, from a survey that had 21 questions, where they rank the questions from 1-4(1 = Did not apply to me at all,2 = Applied to me to some degree or some of the time,3 = Applied to me to a considerate degree or a good part of time,4 = Applied to me very much or most of the time.)
+
+
+```{r import_data, include = TRUE, message = FALSE, warning = FALSE}
+load("Clean_Data.RData")
+dat <- y %>% mutate(Rested = as.numeric(Rested))
+avg_dass <- dat %>%
+  group_by(Rested) %>%
+  summarise(
+    n = n(),
+    across(starts_with("DASS"), ~ mean(.x, na.rm = TRUE)),
+    .groups = "drop"
+  ) %>%
+  rowwise() %>%
+  mutate(Overall_DASS_Average = mean(c_across(starts_with("DASS")), na.rm = TRUE)) %>%
+  ungroup()
+
+n_row <- avg_dass %>%
+  select(Rested, n) %>%
+  pivot_wider(names_from = Rested, values_from = n, names_sort = TRUE) %>%
+  mutate(DASS_Variable = "n") %>%
+  select(DASS_Variable, everything())
+
+avg_dass_long <- avg_dass %>%
+  select(-n) %>%
+  pivot_longer(cols = -Rested, names_to = "DASS_Variable", values_to = "Mean") %>%
+  pivot_wider(names_from = Rested, values_from = Mean, names_sort = TRUE)
+
+final_table <- bind_rows(n_row, avg_dass_long)
+
+knitr::kable(final_table, caption = "Average DASS Scores by Rested Group")
+
+```
+
+From our summary statistics, we see that our overall average of the Dass scores, those who are well rested have an overall lower Dass score, meaning they are showing less signs relating to stress anxiety and depression and for the overall average of those are not well rested are the highest meaning overall they show the most signs relating to stress anxiety and depression. Those that claim somewhat well-rested has an overall value of well rested and not well rested.Ranking our overall Dass score as:well-rested<somewhat-rested<not well-rested.
+
+
+
+```{r dass_boxplot, include=TRUE, message=FALSE, warning=FALSE}
+dat <- read_xlsx("average_DASS_transposed_with_n.xlsx")
+
+
+dat_clean <- dat %>%
+  filter(!(DASS_Variable %in% c("n", "Overall_DASS_Average")))
+
+# Convert from wide → long format
+dat_long <- dat_clean %>%
+  pivot_longer(
+    cols = c(`1`, `2`, `3`),
+    names_to = "Rested",
+    values_to = "Mean_DASS"
+  ) %>%
+  mutate(
+    Rested = recode(Rested,
+                    "1" = "Yes",
+                    "2" = "Somewhat",
+                    "3" = "No"),
+    Rested = factor(Rested, levels = c("Yes", "Somewhat", "No"))
+  )
+
+ggplot(dat_long, aes(x = Rested, y = Mean_DASS, fill = Rested)) +
+  geom_boxplot(width = 0.6, outlier.alpha = 0.3) +
+  # (Optional) add jitter points for each DASS item
+  # geom_jitter(width = 0.15, alpha = 0.6, size = 1.8) +
+  scale_fill_manual(values = c("#99ff99", "#99ccff", "#ff9999")) +
+  labs(
+    title = "Average DASS Results by Rested",
+    x = "Rested Response",
+    y = "Average DASS Value",
+    fill = "Rested"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    legend.position = "none"
+  )
+```
+
+From our box plot,we see that well rested has the smallest IQR(interquartile range) with somewhat being second and not well rested with the largest,the range of each boxplot become bigger from left to right.The left boxplot shows the median is closer to the lower quartile and having lower whiskers downward meaning the majority having lower DASS , showing slight right skewness.The middle bloxplot showing median near between the lower quartile and the  center with slightly longer upper whisker compare to lower ,making it slightly  right skewed.The box plot to the right has median at the center of the boxplot with longer upper whisker meaning it slight right-skewed.
+
+
+```{r dass_anova, include=TRUE, message=FALSE, warning=FALSE}
+
+dat <- read_xlsx("average_DASS_transposed_with_n.xlsx")
+
+
+dat_clean <- dat %>%
+  filter(!(DASS_Variable %in% c("n", "Overall_DASS_Average")))
+
+dat_long <- dat_clean %>%
+  pivot_longer(
+    cols = c(`1`, `2`, `3`),
+    names_to = "Rested",
+    values_to = "Mean_DASS"
+  ) %>%
+  mutate(
+    Rested = factor(Rested,
+                    levels = c("1", "2", "3"),
+                    labels = c("Yes", "Somewhat", "No"))
+  )
+
+
+anova_model <- aov(Mean_DASS ~ Rested, data = dat_long)
+anova_summary <- summary(anova_model)
+anova_summary
+
+anova_table <- anova_summary[[1]]
+F_value <- anova_table[["F value"]][1]
+df1 <- anova_table[["Df"]][1]     # Between groups
+df2 <- anova_table[["Df"]][2]     # Within groups
+alpha <- 0.05
+
+F_critical <- qf(1 - alpha, df1, df2)
+
+cat("F =", round(F_value, 3),
+    "| F_critical =", round(F_critical, 3),
+    "| df1 =", df1, "| df2 =", df2, "\n")
+
+if (F_value > F_critical) {
+  cat("Decision: Reject Ho  There are significant differences among the Rested groups.\n")
+} else {
+  cat("Decision: Fail to reject Ho — No significant differences among the Rested groups.\n")
+}
+```
+
+From our Anova table, we gain an value of F=29.655 and using our hypothesis testing with 
+alpha=0.05 our rejection region being F*>3.15, since our F value is  in our rejection region we reject Ho. Meaning we have significant differences among the well-rested group.
+
+Overall we can conclude from our analysis, that the relation between the self-report level of rested and the average DASS scores.Are inversely proportionate, that the better well rested the lower your level of stress, depression and anxiety you will have.Meaning that sleep is important and people should sleep more.
