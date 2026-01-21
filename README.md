@@ -2,6 +2,46 @@
 
 A comprehensive data analysis project examining the mental health and wellbeing of Canadian undergraduate students during the COVID-19 pandemic. This project investigates relationships between academic programs, emotional regulation, social support seeking, sleep quality, and perceived stress levels.
 
+## 🔬 Statistical Methods & Principles Demonstrated
+
+This project showcases expertise in the following statistical principles and methods:
+
+### Hypothesis Testing & Statistical Inference
+- **One-way ANOVA**: Testing differences in means across multiple groups (academic programs, restfulness categories)
+- **Independent t-tests**: Comparing means between two independent groups (sex differences, international status)
+- **Paired t-tests**: Analyzing within-subject changes (pre/post COVID-19 stress levels)
+- **Statistical significance testing**: Interpreting p-values, alpha levels (α = 0.05), and making inferential decisions
+
+### Effect Size & Practical Significance
+- **Cohen's d**: Calculating and interpreting effect sizes for practical significance
+- **Effect size interpretation**: Distinguishing between statistical and practical significance
+- Distinguishing small, medium, and large effect sizes
+
+### Correlation & Association Analysis
+- **Pearson correlation**: Examining relationships between continuous variables
+- **Correlation matrix analysis**: Identifying significant associations among multiple variables
+- **Interpretation of correlation coefficients**: Understanding strength and direction of relationships
+
+### Linear Modeling & Regression
+- **Linear regression models**: Modeling relationships between predictors and outcomes
+- **Model assessment**: Evaluating model fit and significance
+
+### Data Analysis & Statistical Software
+- **R programming**: Data manipulation, statistical analysis, and visualization
+- **Data cleaning and preprocessing**: Handling missing data, recoding variables, data transformation
+- **Statistical packages**: `psych`, `effectsize`, `tidyverse`, `ggplot2`
+
+### Research Design & Analysis
+- **Between-subjects design**: Comparing groups (academic programs, demographic factors)
+- **Within-subjects design**: Pre/post comparisons (COVID-19 stress impact)
+- **Survey data analysis**: Working with validated psychological scales and survey responses
+- **Sample size considerations**: Analyzing large samples (n = 1,192) with appropriate statistical power
+
+### Data Visualization & Reporting
+- **Statistical graphics**: Creating informative visualizations (boxplots, scatter plots, regression lines)
+- **Results interpretation**: Communicating statistical findings in accessible language
+- **Technical documentation**: Documenting methodology, assumptions, and limitations
+
 ## 📋 Project Overview
 
 This project analyzes survey data from **1,192 undergraduate students** across Canada, collected between September 22 and October 30, 2020. The study was conducted during a critical period of the COVID-19 pandemic, providing insights into how external stressors and individual factors influence student mental health.
