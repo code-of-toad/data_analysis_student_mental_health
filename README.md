@@ -2,6 +2,12 @@
 
 A comprehensive data analysis project examining the mental health and wellbeing of Canadian undergraduate students during the COVID-19 pandemic. This project investigates relationships between academic programs, emotional regulation, social support seeking, sleep quality, and perceived stress levels.
 
+## 📊 Visual Summary
+
+![Student Mental Health Infographic](intermediate_work/infographic.JPG)
+
+*Visual summary of key findings from the student mental health analysis*
+
 ## 🔬 Statistical Methods & Principles Demonstrated
 
 This project showcases expertise in the following statistical principles and methods:
